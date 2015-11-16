@@ -1,49 +1,67 @@
-i
 public class Calculator {
 
-    public static final double OMEGA = 1;
-    public static final double OMEGA_1 = 1;
-    public static final double FIELDS_MODULE = 1;
+	private static final double T = 1000000;
+	private static final double M = 1000;
+	private static double H = 100;
+	private static final double ETA = 0.001;
+	private static final double RO = 1;
+	private static final double A = Math.pow(10, -5);
+	
+	private static double ALPHA = T * M * H / 6 / ETA;
+	private static double BETTA = RO * M * H * A * A / 36 / ETA / ETA;	
+	
+	private static double PSI_0 = - ALPHA / 4;
+		
+	private final double dt = 0.001;
+	private double t = 0;
+	public double ksi = 0;
 
-    private double temp_t = 0; //realize start counting from last time
-
-
-    public double h = 0.00001;
-    public double t = 0;
-    public double psi = 0; //initial psi
-
-    public void iteration() {
-        double k1 = main_equance(t, psi);
-        double k2 = main_equance(t + h / 2, psi + h / 2 * k1);
-        double k3 = main_equance(t + h / 2, psi + h / 2 * k2);
-        double k4 = main_equance(t + h, psi + h * k3);
-
-        psi += h / 6 * (k1 + 2 * k2 + 2 * k3 + k4);
-    }
-
-    public static double main_equance(double t, double psi) {
-        return getDerPsi(t) - OMEGA_1 * Math.sin(psi);  //check sign
-    }
-
-    public static double getDerPsi(double t) {
-        double var = Math.PI / (2 * OMEGA);
-        if (t < var)
-            return + FIELDS_MODULE;
-        int n = 0;
-        while (true) {
-            if ((t >= var * (4 * n - 1)) && (t < var * (4 * n + 1)))
-                return + FIELDS_MODULE;
-            if ((t >= var * (4 * n - 3)) && (t < var * (4 * n - 1)))
-                return - FIELDS_MODULE;
-        }
-    }
-
-    public static double getVy() {
-        return 0;
-    }
-
-    public static double getVx() {
-        return 0;
-    }
-
+	public double ux = 0;
+	public double uy = 0;
+	public double counter = 0;
+	
+	public double getAverrageUx() {
+		return ux / counter;
+	}
+	
+	public double getAverrageUy() {
+		return uy / counter;
+	}
+	
+	public void iteration() {
+		counter++;
+		double k1 = equation(t, ksi);
+		double k2 = equation(t + dt / 2, ksi + k1 * dt / 2);
+		double k3 = equation(t + dt / 2, ksi + k2 * dt / 2);
+		double k4 = equation(t + dt, ksi + k3 * dt);
+		ksi += dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4);
+		t += dt;
+		
+		ux += getUx();
+		uy += getUy();
+	}
+	
+	private static double equation(double t, double ksi) {
+		return - ALPHA * Math.sin(ksi) - getDerivatePsi(t);
+	}
+	
+	private static double getDerivatePsi(double t) {
+		double n = 0;
+		while (true) {
+			n++;
+			if ((t >= n - 1) && (t < n - 0.5)) 
+				return 4 * PSI_0;
+			if ((t > n - 0.5) && (t < n))
+				return -4 * PSI_0;
+		}
+	}
+	
+	public double getUx() {
+		return Math.sin(2 * Math.PI * t) /
+				(1 + BETTA * BETTA * Math.sin(ksi) * Math.sin(ksi));
+	}
+	
+	public double getUy() {
+		return - BETTA * Math.sin(ksi) * getUx();
+	}
 }
