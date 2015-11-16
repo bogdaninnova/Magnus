@@ -8,17 +8,19 @@ public class Main {
     	
     	
     	Calculator calc = new Calculator();
-    	    	
-    	ArrayList<Double> listX = new ArrayList<Double>(1000);
-    	ArrayList<Double> listY = new ArrayList<Double>(1000);
-    	
-    	for (int i = 0; i < 100000; i++) 
+
+    	ArrayList<Double> listX = new ArrayList<Double>(10000);
+    	ArrayList<Double> listY = new ArrayList<Double>(10000);
+
+    	for (int i = 0; i < 0; i++)
     		calc.iteration();
-    	for (int i = 0; i < 1000; i++) {
+
+
+    	for (int i = 0; i < 10000; i++) {
     		calc.iteration();
-			listX.add(calc.ux);
-			listY.add(calc.uy);
-    	}
+			listX.add(calc.getUx());
+			listY.add(calc.getUy());
+	   	}
     	
 
     	
