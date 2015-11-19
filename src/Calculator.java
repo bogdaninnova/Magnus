@@ -32,9 +32,11 @@ public class Calculator {
 		ux += getUx();
 		uy += getUy();
 	}
+
+
 	
 	private static double equation(double t, double ksi) {
-		return - ALPHA * Math.sin(ksi) - getDerivatePsi(t);
+		return - ALPHA * Math.sin(ksi * Math.PI / 180) - getDerivatePsi(t);
 	}
 	
 	private static double getDerivatePsi(double t) {

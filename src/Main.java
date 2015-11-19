@@ -11,19 +11,22 @@ public class Main {
 
     	ArrayList<Double> listX = new ArrayList<Double>(10000);
     	ArrayList<Double> listY = new ArrayList<Double>(10000);
+		ArrayList<Double> listKsi = new ArrayList<Double>(10000);
 
-    	for (int i = 0; i < 0; i++)
+    	for (int i = 0; i < 100000; i++)
     		calc.iteration();
 
 
-    	for (int i = 0; i < 10000; i++) {
+
+    	for (int i = 0; i < 30000; i++) {
     		calc.iteration();
 			listX.add(calc.getUx());
 			listY.add(calc.getUy());
+			listKsi.add(calc.ksi);
 	   	}
-    	
 
-    	
+
+		writeDoubleList(listKsi, "listKsi");
     	writeDoubleList(listX, "listX");
     	writeDoubleList(listY, "listY");
     }
