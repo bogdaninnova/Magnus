@@ -6,8 +6,8 @@ public class Calculator {
 	private static final double ETA = 0.001;
 	private static final double RO = 1;
 	private static final double A = Math.pow(10, -5);
-	private static double ALPHA = 1;//T * M * H / 6 / ETA;
-	private static double BETTA = 1;//RO * M * H * A * A / 36 / ETA / ETA;	
+	public double ALPHA = 1;//T * M * H / 6 / ETA;
+	public double BETTA = 1;//RO * M * H * A * A / 36 / ETA / ETA;
 	
 	private static double PSI_0 = 1;
 	public double ksi = 0;
@@ -21,7 +21,14 @@ public class Calculator {
 		ksi += dt * equation(t, ksi);
 		t += dt;
 	}
-	
+
+	public void reset() {
+		ux = 0;
+		uy = 0;
+		t = 0;
+		ksi = 0;
+	}
+
 	public void RungeKuttIteration() {
 		double k1 = equation(t, ksi);
 		double k2 = equation(t + dt / 2, ksi + k1 * dt / 2);
@@ -31,7 +38,7 @@ public class Calculator {
 		t += dt;
 	}
 
-	private static double equation(double t, double ksi) {
+	private double equation(double t, double ksi) {
 		return - ALPHA * Math.sin(ksi) - getDerivatePsi(t);
 	}
 	
