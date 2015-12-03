@@ -5,44 +5,33 @@ public class Main {
 
     public static void main(String[] args) {
 
+		int count = 10000;
+
 		Calculator calc = new Calculator();
-		ArrayList<Double> listKsi = new ArrayList<Double>(10000);
-		ArrayList<Double> listX = new ArrayList<Double>(10000);
-		ArrayList<Double> listY = new ArrayList<Double>(10000);
+		ArrayList<Double> listKsi = new ArrayList<Double>(count);
+		ArrayList<Double> listX = new ArrayList<Double>(count);
+		ArrayList<Double> listY = new ArrayList<Double>(count);
 
-
-		ArrayList<Double> listUx = new ArrayList<Double>(10000);
-		ArrayList<Double> listUy = new ArrayList<Double>(10000);
-
-		double k = 1;
-		double ux;
-		double uy;
-			calc.BETTA = k;
-			for (int i = 0; i < 4000; i++)
+		for (double phase = 0; phase < 1.001; phase += 0.1) {
+			double[] u;
+			for (int i = 0; i < count; i++) {
 				calc.RungeKuttIteration();
-
-			ux = 0;
-			uy = 0;
-			int p = 10000;
-			for (int i = 0; i < p; i++) {
-				calc.RungeKuttIteration();
-				calc.ux += calc.getUx();
-				calc.uy += calc.getUy();
+				u = calc.getU();
+				calc.ux += u[0];
+				calc.uy += u[1];
 				listX.add(calc.ux);
 				listY.add(calc.uy);
-				ux += calc.ux;
-				uy += calc.uy;
+				listKsi.add(calc.ksi);
 			}
-			listUx.add(ux / p);
-			listUy.add(uy / p);
 
-			calc.reset();
+			//DrawComponents.wright(listX, "res/listX.phase = " + phase);
+			//DrawComponents.wright(listY, "res/listY.phase = " + phase);
+			//DrawComponents.wright(listKsi, "res/listKsi.phase = " + phase);
 
-		writeDoubleList(listUx, "listUx");
-		writeDoubleList(listUy, "listUy");
-		writeDoubleList(listX, "listX");
-		writeDoubleList(listY, "listY");
-
+			//writeDoubleList(listX, "res/listX.phase = " + phase);
+			writeDoubleList(listY, "res/listY.phase = " + round(phase, 2));
+			//writeDoubleList(listKsi, "res/listKsi.phase = " + phase);
+		}
 
     }
 
@@ -83,11 +72,11 @@ public class Main {
 
 			calc.reset();
 		}
-		writeDoubleList(listUx, "listUx");
-		writeDoubleList(listUy, "listUy");
-		//writeDoubleList(listKsi, "listKsi");
-		//writeDoubleList(listX, "listX");
-		//writeDoubleList(listY, "listY");
+		writeDoubleList(listUx, "res/listUx");
+		writeDoubleList(listUy, "res/listUy");
+		//writeDoubleList(listKsi, "res/listKsi");
+		//writeDoubleList(listX, "res/listX");
+		//writeDoubleList(listY, "res/listY");
 	}
     
 	@SuppressWarnings("resource")
@@ -102,5 +91,14 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static double round(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+
+		long factor = (long) Math.pow(10, places);
+		value = value * factor;
+		long tmp = Math.round(value);
+		return (double) tmp / factor;
 	}
 }

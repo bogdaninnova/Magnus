@@ -8,10 +8,16 @@ public class Calculator {
 	private static final double A = Math.pow(10, -5);
 	public double ALPHA = 1;//T * M * H / 6 / ETA;
 	public double BETTA = 1;//RO * M * H * A * A / 36 / ETA / ETA;
-	
+	private final double dt = 0.001;
 	private static double PSI_0 = 1;
 	public double ksi = 0;
-	private final double dt = 0.001;
+
+
+	public double phase = 0;
+
+
+
+
 	private double t = 0;
 	
 	public double ux = 0;
@@ -52,9 +58,18 @@ public class Calculator {
 				return - 4 * PSI_0;
 		}
 	}
-	
+
+
+	public double[] getU() {
+		double ux = getUx();
+		double uy = - BETTA * Math.sin(ksi) * getUx();
+		double[] result = {ux, uy};
+		return result;
+	}
+
+
 	public double getUx() {
-		return Math.sin(2 * Math.PI * t) /
+		return Math.sin(2 * Math.PI * t + phase) /
 				(1 + BETTA * BETTA * Math.sin(ksi) * Math.sin(ksi));
 	}
 	
