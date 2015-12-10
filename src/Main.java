@@ -5,36 +5,69 @@ public class Main {
 
     public static void main(String[] args) {
 
-		int count = 10000;
+    	phaseTracks(0);
+    }
+    
+    public static void yAverByPhase() {
+		ArrayList<Double> list = new ArrayList<Double>(2100);
 
-		Calculator calc = new Calculator();
-		ArrayList<Double> listKsi = new ArrayList<Double>(count);
-		ArrayList<Double> listX = new ArrayList<Double>(count);
-		ArrayList<Double> listY = new ArrayList<Double>(count);
 
-		for (double phase = 0; phase < 1.001; phase += 0.1) {
-			double[] u;
-			for (int i = 0; i < count; i++) {
+		
+		for (double phase = 0; phase < 2; phase += 0.001) {
+			Calculator calc = new Calculator();
+			calc.phase = phase * Math.PI;
+			
+			for (int i = 0; i < 10000; i++)
 				calc.RungeKuttIteration();
-				u = calc.getU();
-				calc.ux += u[0];
-				calc.uy += u[1];
-				listX.add(calc.ux);
-				listY.add(calc.uy);
-				listKsi.add(calc.ksi);
+			
+			for (int i = 0; i < 1000; i++) {
+				calc.RungeKuttIteration();
+				calc.uy += calc.getU()[1];
 			}
 
-			//DrawComponents.wright(listX, "res/listX.phase = " + phase);
-			//DrawComponents.wright(listY, "res/listY.phase = " + phase);
-			//DrawComponents.wright(listKsi, "res/listKsi.phase = " + phase);
-
-			//writeDoubleList(listX, "res/listX.phase = " + phase);
-			writeDoubleList(listY, "res/listY.phase = " + round(phase, 2));
-			//writeDoubleList(listKsi, "res/listKsi.phase = " + phase);
 		}
-
+		
+		writeDoubleList(list, "res/list");
     }
 
+    
+    public static void phaseTracks(double phase) {
+		int count = (int) (10 / Calculator.dt);
+
+		Calculator calc = new Calculator();
+		ArrayList<Double> listX = new ArrayList<Double>(count);
+		ArrayList<Double> listY = new ArrayList<Double>(count);
+		
+		int max = 100;
+		int counter = 0;
+		
+		System.out.println(phase);
+		calc.phase = phase * Math.PI;
+		double[] u;
+		for (int i = 0; i < count; i++) {
+			counter++;
+			calc.RungeKuttIteration();
+			u = calc.getU();
+			calc.ux += u[0];
+			calc.uy += u[1];
+			
+			if (counter == max) {
+				counter = 0;
+				listX.add(calc.ux);
+				listY.add(calc.uy);
+			}
+		}
+
+		//DrawComponents.wright(listX, "res/listX_phase = " + phase);
+		//DrawComponents.wright(listY, "res/listY_phase = " + phase);
+		//DrawComponents.wright(listKsi, "res/listKsi_phase = " + phase);
+
+		
+
+		writeDoubleList(cutTo32(listX), "res/listX.phase = " + round(phase, 2));
+		writeDoubleList(cutTo32(listY), "res/listY.phase = " + round(phase, 2));
+		//writeDoubleList(listKsi, "res/listKsi.phase = " + phase);
+    }
 
 	public static void circle() {
 		Calculator calc = new Calculator();
@@ -100,5 +133,23 @@ public class Main {
 		value = value * factor;
 		long tmp = Math.round(value);
 		return (double) tmp / factor;
+	}
+	
+	public static List<Double> cutTo32(List<Double> list) {
+		double size = (double) list.size();
+		if (size < 32000)
+			return list;
+		ArrayList<Double> newList = new ArrayList<Double>(32000);
+		double max = size / 32000.0;
+		
+		double count = 0;
+		for (double e : list) {
+			count++;
+			if (count > max) {
+				count = 0;
+				newList.add(e);
+			}
+		}
+		return newList;
 	}
 }

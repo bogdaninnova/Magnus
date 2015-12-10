@@ -6,16 +6,14 @@ public class Calculator {
 	private static final double ETA = 0.001;
 	private static final double RO = 1;
 	private static final double A = Math.pow(10, -5);
-	public double ALPHA = 1;//T * M * H / 6 / ETA;
-	public double BETTA = 1;//RO * M * H * A * A / 36 / ETA / ETA;
-	private final double dt = 0.001;
-	private static double PSI_0 = 1;
+	public static double ALPHA = Math.pow(10, 5);//T * M * H / 6 / ETA;
+	public static double BETTA = Math.pow(10, -6);//RO * M * H * A * A / 36 / ETA / ETA;
+	public static double dt = 1 / ALPHA;
+	private static double PSI_0 = ALPHA / 4;
 	public double ksi = 0;
 
 
 	public double phase = 0;
-
-
 
 
 	private double t = 0;
