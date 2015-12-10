@@ -4,27 +4,27 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-
-    	phaseTracks(0);
+    	//for (double i = 0; i < 2; i += 0.1) phaseTracks(i);
+    	yAverByPhase();
     }
     
     public static void yAverByPhase() {
 		ArrayList<Double> list = new ArrayList<Double>(2100);
 
-
+		int count = (int) (1 / Calculator.dt);
 		
 		for (double phase = 0; phase < 2; phase += 0.001) {
 			Calculator calc = new Calculator();
 			calc.phase = phase * Math.PI;
-			
-			for (int i = 0; i < 10000; i++)
+			System.out.println(phase);
+			for (int i = 0; i < 10 * count; i++)
 				calc.RungeKuttIteration();
 			
-			for (int i = 0; i < 1000; i++) {
+			for (int i = 0; i < count; i++) {
 				calc.RungeKuttIteration();
 				calc.uy += calc.getU()[1];
 			}
-
+			list.add(calc.uy);
 		}
 		
 		writeDoubleList(list, "res/list");
@@ -32,30 +32,25 @@ public class Main {
 
     
     public static void phaseTracks(double phase) {
-		int count = (int) (10 / Calculator.dt);
 
 		Calculator calc = new Calculator();
-		ArrayList<Double> listX = new ArrayList<Double>(count);
-		ArrayList<Double> listY = new ArrayList<Double>(count);
-		
-		int max = 100;
-		int counter = 0;
+		ArrayList<Double> listKsi = new ArrayList<Double>(10000);
+		ArrayList<Double> listX = new ArrayList<Double>(10000);
+		ArrayList<Double> listY = new ArrayList<Double>(10000);
 		
 		System.out.println(phase);
 		calc.phase = phase * Math.PI;
 		double[] u;
-		for (int i = 0; i < count; i++) {
-			counter++;
+		for (int i = 0; i < 10000; i++) {
 			calc.RungeKuttIteration();
 			u = calc.getU();
 			calc.ux += u[0];
 			calc.uy += u[1];
 			
-			if (counter == max) {
-				counter = 0;
-				listX.add(calc.ux);
-				listY.add(calc.uy);
-			}
+			listKsi.add(calc.ksi);
+			listX.add(calc.ux);
+			listY.add(calc.uy);
+			
 		}
 
 		//DrawComponents.wright(listX, "res/listX_phase = " + phase);
@@ -66,6 +61,7 @@ public class Main {
 
 		writeDoubleList(cutTo32(listX), "res/listX.phase = " + round(phase, 2));
 		writeDoubleList(cutTo32(listY), "res/listY.phase = " + round(phase, 2));
+		writeDoubleList(cutTo32(listKsi), "res/listKsi.phase = " + round(phase, 2));
 		//writeDoubleList(listKsi, "res/listKsi.phase = " + phase);
     }
 

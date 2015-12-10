@@ -1,14 +1,18 @@
 public class Calculator {
 
-	private static final double T = 1000000;
+	
+	
+	
+	private static final double T = Math.pow(10, -6);
 	private static final double M = 1000;
 	private static double H = 100;
-	private static final double ETA = 0.001;
+	private static final double ETA = 0.01;
 	private static final double RO = 1;
 	private static final double A = Math.pow(10, -5);
-	public static double ALPHA = Math.pow(10, 5);//T * M * H / 6 / ETA;
-	public static double BETTA = Math.pow(10, -6);//RO * M * H * A * A / 36 / ETA / ETA;
-	public static double dt = 1 / ALPHA;
+	private static final double B = Math.pow(10, -5);
+	public static double ALPHA = T * M * H / 6 / ETA * A * A * A / B / B / B;
+	public static double BETTA = RO * M * H * A * A * A / 36 / ETA / ETA / B;
+	public static double dt = Math.pow(10, -3);
 	private static double PSI_0 = ALPHA / 4;
 	public double ksi = 0;
 
