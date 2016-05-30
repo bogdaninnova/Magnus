@@ -49,6 +49,8 @@ public class Calculator {
 //        System.out.println("ALPHA = " + ALPHA);
 //    }
 
+    int counter = 0;
+
     public void iteration(boolean isWrite) {
         Vector dM = getdM();
         M = M.plus(dM);
@@ -56,8 +58,12 @@ public class Calculator {
         Vector U = getU(M, L, t);
         L = L.plus(U.multiply(v0T));
         if (isWrite) {
-            locationList.add(L);
-            magnetizationList.add(M);
+            counter++;
+            if (counter == 100) {
+                counter = 0;
+                locationList.add(L);
+                magnetizationList.add(M);
+            }
         }
 
     }
