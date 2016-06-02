@@ -3,16 +3,18 @@ public class Main {
     public static void main(String[] args) {
 
 
-        int m = 1000000;
+        int m = 10;
    //     m = 30;
-        int n = 100000;
+        int n = 10;
         Calculator calc = new Calculator();
 
-        while (m --> 0)
+        while (calc.t < m)
             calc.iteration(false);
 
-        while (n --> 0)
+        while (calc.t < m + n)
             calc.iteration(true);
+
+        System.out.println(calc.L.getX());
 
         TextWriter.writeTraectorysCoordinates(calc.locationList, "location");
         TextWriter.writeTraectorysCoordinates(calc.magnetizationList, "magnetization");

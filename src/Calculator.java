@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class Calculator {
 
-    private double t = 0;
-    private static final double dt = Math.pow(10, -5);
+    public double t = 0;
+    public static final double dt = Math.pow(10, -6);
 
     private static final Vector Ex = new Vector(1, 0, 0);
     private static final double initTheta = Math.PI / 4;
     private Vector M = new Vector(Math.sin(initTheta), 0, Math.cos(initTheta));//Magnetic moment
-    private Vector L = new Vector(1.5, 0, 0);//LOCATION
+    public Vector L = new Vector(1.5, 0, 0);//LOCATION
 
     public ArrayList<Vector> locationList = new ArrayList<>();
     public ArrayList<Vector> magnetizationList = new ArrayList<>();
@@ -22,12 +22,13 @@ public class Calculator {
 
     private static final double H0 = ABS_M;
     private static final double PHI = Math.PI / 2;
-    private static final double OMEGA = Math.pow(10, 3) / (2 * Math.PI);
+    private static final double OMEGA = Math.pow(10, 3);
+    private static final double T = 2 * Math.PI / OMEGA;
 
 
 
 
-    private static final double v0T = getV0() / OMEGA;
+    private static final double v0T = getV0() * T;
     private static final double G_M = G / ABS_M;
     private static final double H0_M = H0 / ABS_M;
     private static final double BETA = getBeta();
@@ -41,30 +42,35 @@ public class Calculator {
 //    private static final double ALPHA = 0.5;
 
 
-//    {
-//        System.out.println("v0T = " + v0T);
-//        System.out.println("G_M = " + G_M);
-//        System.out.println("H0_M = " + H0_M);
-//        System.out.println("BETA = " + BETA);
-//        System.out.println("ALPHA = " + ALPHA);
-//    }
+    {
+        System.out.println("v0T = " + v0T);
+        System.out.println("G_M = " + G_M);
+        System.out.println("H0_M = " + H0_M);
+        System.out.println("BETA = " + BETA);
+        System.out.println("ALPHA = " + ALPHA);
+        System.out.println("T = " + T);
+    }
 
     int counter = 0;
 
     public void iteration(boolean isWrite) {
+        counter++;
         Vector dM = getdM();
         M = M.plus(dM);
-        t += dt;
+
         Vector U = getU(M, L, t);
-        L = L.plus(U.multiply(v0T));
-        if (isWrite) {
-            counter++;
-            if (counter == 100) {
-                counter = 0;
+        L = L.plus(U.multiply(v0T * dt));
+        t += dt;
+
+        if (counter == 10000) {
+            counter = 0;
+            System.out.println(t);
+            if (isWrite) {
                 locationList.add(L);
                 magnetizationList.add(M);
             }
         }
+
 
     }
 
