@@ -21,18 +21,19 @@ public class Calculator {
     private static final double G = 100;
 
     private static final double H0 = ABS_M;
-    private static final double PHI = Math.PI / 2;
+    private static final double PHI = 0 * Math.PI / 2;
     private static final double OMEGA = Math.pow(10, 3);
     private static final double T = 2 * Math.PI / OMEGA;
 
 
 
 
-    private static final double v0T = getV0() * T;
+    public static final double v0T = getV0() * T;
     private static final double G_M = G / ABS_M;
     private static final double H0_M = H0 / ABS_M;
     private static final double BETA = getBeta();
     private static final double ALPHA = getAlpha();
+
 
 
 //    private static final double v0T = 2 * Math.pow(10, -7);
@@ -53,6 +54,14 @@ public class Calculator {
 
     int counter = 0;
 
+
+    private Vector averU = new Vector();
+    private double averCounter = 0;
+
+    public Vector getAverU() {
+        return averU.multiply(1.0 / averCounter);
+    }
+
     public void iteration(boolean isWrite) {
         counter++;
         Vector dM = getdM();
@@ -66,6 +75,8 @@ public class Calculator {
             counter = 0;
             System.out.println(t);
             if (isWrite) {
+                averCounter++;
+                averU = averU.plus(U);
                 locationList.add(L);
                 magnetizationList.add(M);
             }
