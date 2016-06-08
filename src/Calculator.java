@@ -12,6 +12,7 @@ public class Calculator {
 
     public ArrayList<Vector> locationList = new ArrayList<>();
     public ArrayList<Vector> magnetizationList = new ArrayList<>();
+    public ArrayList<Vector> fieldList = new ArrayList<>();
 
     private static final double RADIUS = 2 * Math.pow(10, -6);
     private static final double ABS_M = 3.89 * 1000 / (4 * Math.PI);
@@ -21,7 +22,7 @@ public class Calculator {
     private static final double G = 100;
 
     private static final double H0 = ABS_M;
-    private static final double PHI = 0 * Math.PI / 2;
+    private static final double PHI = 1 * Math.PI / 2;
     private static final double OMEGA = Math.pow(10, 3);
     private static final double T = 2 * Math.PI / OMEGA;
 
@@ -71,7 +72,7 @@ public class Calculator {
         L = L.plus(U.multiply(v0T * dt));
         t += dt;
 
-        if (counter == 10000) {
+        if (counter == 1000) {
             counter = 0;
             System.out.println(t);
             if (isWrite) {
@@ -79,6 +80,7 @@ public class Calculator {
                 averU = averU.plus(U);
                 locationList.add(L);
                 magnetizationList.add(M);
+                fieldList.add(getH(L, t));
             }
         }
 

@@ -2,13 +2,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println(Calculator.v0T * Calculator.dt * 0.3627554017749045 / 0.00628 * 100000) ;
-        System.exit(0);
-
-        int m = 5;
+        int m = 3;
    //     m = 30;
-        int n = 1;
-        Calculator calc = new Calculator();
+        int n = 3;
+        Calculator2 calc = new Calculator2();
 
         while (calc.t < m)
             calc.iteration(false);
@@ -24,6 +21,7 @@ public class Main {
 
         TextWriter.writeTraectorysCoordinates(calc.locationList, "location");
         TextWriter.writeTraectorysCoordinates(calc.magnetizationList, "magnetization");
+        TextWriter.writeTraectorysCoordinates(calc.fieldList, "fieldList");
 
 
 
