@@ -8,7 +8,7 @@ public class Calculator2 {
     private static final Vector Ex = new Vector(1, 0, 0);
     private static final double initTheta = Math.PI / 4;
     private Vector M = new Vector(Math.sin(initTheta), 0, Math.cos(initTheta));//Magnetic moment
-    public Vector L = new Vector(1.5, 0, 0);//LOCATION
+    public Vector L = new Vector(0, 0, 0);//LOCATION
 
     public ArrayList<Vector> locationList = new ArrayList<>();
     public ArrayList<Vector> magnetizationList = new ArrayList<>();
@@ -16,29 +16,23 @@ public class Calculator2 {
 
     private static final double RADIUS = 2 * Math.pow(10, -6);
     private static final double ABS_M = 3.89 * 1000 / (4 * Math.PI);
-    private static final double ABS_H = 3.89 * 1000 / (4 * Math.PI);//TODO
+    private static final double ABS_H = 1 * ABS_M;
     private static final double ETA = 8.9 * Math.pow(10, -3);
     private static final double b = 2.5 * Math.pow(10, -6);
-    private static final double PSI0 = Math.PI / 2;
-    private static final double F0 = 1;//TODO
+    private static final double PSI0 = Math.PI / 4;
     private static final double RHO = 1;
 
-    private static final double omega_m = 1;//TODO
-
     private static final double OMEGA = Math.pow(10, 3);
-    private static final double T = 2 * Math.PI / OMEGA;
 
-    public static final double v0T = getV0() * T;//TODO
     private static final double ALPHA = getAlpha();
-
-    private static final double Re = getRe();
+    private static final double BETA = getBeta();
 
     int counter = 99;
     private Vector averU = new Vector();
     private double averCounter = 0;
 
     public Vector getAverU() {
-        return averU.multiply(v0T / averCounter);
+        return averU.multiply(1.0 / averCounter);
     }
 
     public void iteration(boolean isWrite) {
@@ -47,7 +41,7 @@ public class Calculator2 {
         M = M.plus(dM);
 
         Vector U = getU(M, t);
-        L = L.plus(U.multiply(v0T * dt));
+        L = L.plus(U.multiply(dt));
         t += dt;
 
         if (counter == 100) {
@@ -61,15 +55,7 @@ public class Calculator2 {
                 fieldList.add(getH(t));
             }
         }
-
-
     }
-
-
-
-
-
-
 
 
     private static Vector getH(double t) {
@@ -81,9 +67,6 @@ public class Calculator2 {
         return PSI0 * Math.sin(2 * Math.PI * t);
     }
 
-
-
-
     private static Vector getU(Vector m, double t) {
         Vector kappa = getKappa(getOmega(m, getH(t)));
 
@@ -94,7 +77,7 @@ public class Calculator2 {
 
 
     private static Vector getKappa(Vector omega) {
-        return omega.multiply(Re / (6 * omega_m));
+        return omega.multiply(BETA);
     }
 
     private static Vector getOmega(Vector m, Vector h) {
@@ -124,13 +107,8 @@ public class Calculator2 {
                 (3 * ETA * Math.pow(b, 3) * OMEGA);
     }
 
-
-    public static double getV0() {
-        return F0 * b * b * omega_m / ETA;
-    }
-
-    public static double getRe() {
-        return RHO * b * b * omega_m / ETA;
+    public static double getBeta() {
+        return RHO * b * b / (6 * ETA);
     }
 
 }
