@@ -35,6 +35,9 @@ public class Calculator2 {
         return averU.multiply(1.0 / averCounter);
     }
 
+
+
+    private int count2 = 9;
     public void iteration(boolean isWrite) {
         counter++;
         Vector dM = getdM();
@@ -50,9 +53,14 @@ public class Calculator2 {
             if (isWrite) {
                 averCounter++;
                 averU = averU.plus(U);
-                locationList.add(L);
-                magnetizationList.add(M);
-                fieldList.add(getH(t));
+                count2++;
+                if (count2 == 10) {
+                    count2 = 0;
+                    locationList.add(L);
+                    magnetizationList.add(M);
+                    fieldList.add(getH(t));
+                }
+
             }
         }
     }

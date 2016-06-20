@@ -4,7 +4,7 @@ public class Main {
 
         int m = 3;
    //     m = 30;
-        int n = 3;
+        int n = 50;
         Calculator2 calc = new Calculator2();
 
         while (calc.t < m)
@@ -13,15 +13,17 @@ public class Main {
         while (calc.t < m + n)
             calc.iteration(true);
 
-        System.out.println(calc.L.getX());
+
+        ExcelWriter ew = new ExcelWriter();
+        ew.addVectorList("calc.locationList", calc.locationList);
+        ew.addVectorList("calc.magnetizationList", calc.magnetizationList);
+        ew.addVectorList("calc.fieldList", calc.fieldList);
+        ew.write("Magnus");
 
         System.out.println(calc.getAverU().getX());
         System.out.println(calc.getAverU().getY());
         System.out.println(calc.getAverU().getZ());
 
-        TextWriter.writeTraectorysCoordinates(calc.locationList, "location");
-        TextWriter.writeTraectorysCoordinates(calc.magnetizationList, "magnetization");
-        TextWriter.writeTraectorysCoordinates(calc.fieldList, "fieldList");
 
 
 
