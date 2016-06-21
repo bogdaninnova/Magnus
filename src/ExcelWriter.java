@@ -15,9 +15,12 @@ public class ExcelWriter {
     private Workbook wb;
 
     public ExcelWriter() {
-        wb = new HSSFWorkbook();
+        rest();
     }
 
+    public void rest() {
+        wb = new HSSFWorkbook();
+    }
 
     public void addVectorList(String sheetName, List<Vector> list) {
         List<Double> listX = new ArrayList<>();

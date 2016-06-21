@@ -19,7 +19,7 @@ public class Calculator2 {
     private static final double ABS_H = 1 * ABS_M;
     private static final double ETA = 8.9 * Math.pow(10, -3);
     private static final double b = 2.5 * Math.pow(10, -6);
-    private static final double PSI0 = Math.PI / 4;
+    public static  double PSI0 = 1 * Math.PI;
     private static final double RHO = 1;
 
     private static final double OMEGA = Math.pow(10, 3);
