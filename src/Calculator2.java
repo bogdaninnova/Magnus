@@ -3,11 +3,14 @@ import java.util.ArrayList;
 public class Calculator2 {
 //
     public double t = 0;
-    public static final double dt = Math.pow(10, -6);
+    public static final double dt = Math.pow(10, -5);
 
     private static final Vector Ex = new Vector(1, 0, 0);
-    private static final double initTheta = Math.PI / 4;
-    private Vector M = new Vector(Math.sin(initTheta), 0, Math.cos(initTheta));//Magnetic moment
+    public static double initTheta = Math.PI / 2 - Math.PI/10;
+    public static double initPhi = Math.PI;
+    private Vector M = new Vector(Math.sin(initTheta) * Math.cos(initPhi),
+                    Math.sin(initTheta) * Math.sin(initPhi),
+                    Math.cos(initTheta));//Magnetic moment
     public Vector L = new Vector(0, 0, 0);//LOCATION
 
     public ArrayList<Vector> locationList = new ArrayList<>();
@@ -16,10 +19,10 @@ public class Calculator2 {
 
     private static final double RADIUS = 2 * Math.pow(10, -6);
     private static final double ABS_M = 3.89 * 1000 / (4 * Math.PI);
-    private static final double ABS_H = 1 * ABS_M;
+    private static final double ABS_H = 0.01 * ABS_M;
     private static final double ETA = 8.9 * Math.pow(10, -3);
     private static final double b = 2.5 * Math.pow(10, -6);
-    public static  double PSI0 = 1 * Math.PI;
+    public static  double PSI0 = Math.PI;
     private static final double RHO = 1;
 
     private static final double OMEGA = Math.pow(10, 3);
@@ -27,19 +30,30 @@ public class Calculator2 {
     private static final double ALPHA = getAlpha();
     private static final double BETA = getBeta();
 
-    int counter = 99;
+
     private Vector averU = new Vector();
+    private Vector averM = new Vector();
     private double averCounter = 0;
 
     public Vector getAverU() {
         return averU.multiply(1.0 / averCounter);
     }
 
+    public Vector getAverM() {
+        return averM.multiply(1.0 / averCounter);
+    }
+
+    public void resetAverrage() {
+        averU = new Vector();
+        averM = new Vector();
+        averCounter = 0;
+    }
 
 
-    private int count2 = 9;
+//    private int counter = 99;
+    private int count2 = 199;
     public void iteration(boolean isWrite) {
-        counter++;
+ //       counter++;
         Vector dM = getdM();
         M = M.plus(dM);
 
@@ -47,14 +61,15 @@ public class Calculator2 {
         L = L.plus(U.multiply(dt));
         t += dt;
 
-        if (counter == 100) {
-            counter = 0;
+  //      if (counter == 100) {
+  //          counter = 0;
             //System.out.println(t);
             if (isWrite) {
                 averCounter++;
                 averU = averU.plus(U);
+                averM = averM.plus(M);
                 count2++;
-                if (count2 == 10) {
+                if (count2 == 200) {
                     count2 = 0;
                     locationList.add(L);
                     magnetizationList.add(M);
@@ -62,7 +77,7 @@ public class Calculator2 {
                 }
 
             }
-        }
+    //    }
     }
 
 
@@ -108,7 +123,6 @@ public class Calculator2 {
     private static Vector func(Vector M, double t) {
         return new Vector(M.crossProduct(M.crossProduct(getH(t)))).multiply(-ALPHA);
     }
-
 
     public static double getAlpha() {
         return Math.PI * ABS_M * ABS_H * Math.pow(RADIUS, 3) /
