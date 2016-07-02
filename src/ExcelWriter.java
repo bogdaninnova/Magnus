@@ -33,7 +33,81 @@ public class ExcelWriter {
             listZ.add(vector.getZ());
         }
         addFewColumns(sheetName, listX, listY, listZ);
+    }
 
+    public void addVectorList(String sheetName, List<Vector> list, String ... coordinate) {
+        boolean isX = false;
+        boolean isY = false;
+        boolean isZ = false;
+        for (String c : coordinate) {
+            switch (c) {
+                case "X":
+                    if (!isX) {
+                        isX = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate x is already in list");
+                    }
+                case "x":
+                    if (!isX) {
+                        isX = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate x is already in list");
+                    }
+                case "Y":
+                    if (!isY) {
+                        isY = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate y is already in list");
+                    }
+                case "y":
+                    if (!isY) {
+                        isY = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate y is already in list");
+                    }
+                case "Z":
+                    if (!isZ) {
+                        isZ = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate z is already in list");
+                    }
+                case "z":
+                    if (!isZ) {
+                        isZ = true;
+                        break;
+                    } else {
+                        throw new RuntimeException("Coordinate z is already in list");
+                    }
+                default:
+                    throw new RuntimeException("No such coordinate");
+            }
+
+        }
+
+
+        List<Double> listX = new ArrayList<>();
+        List<Double> listY = new ArrayList<>();
+        List<Double> listZ = new ArrayList<>();
+
+        for (Vector vector : list) {
+            if (isX)
+                listX.add(vector.getX());
+            if (isY)
+                listY.add(vector.getY());
+            if (isZ)
+                listZ.add(vector.getZ());
+        }
+        if (!listX.isEmpty())
+            addColumn(sheetName, listX);
+        if (!listY.isEmpty())
+            addColumn(sheetName, listY);
+        if (!listZ.isEmpty())
+            addColumn(sheetName, listZ);
     }
 
 

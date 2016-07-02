@@ -3,106 +3,76 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        ExcelWriter ew3 = new ExcelWriter();
-        for (double h = 0.000001; h < 1.01; h *= 10)
-            for (double psi = 0; psi <= 10 * Math.PI; psi += Math.PI / 8) {
-                ArrayList<Double> list3 = new ArrayList<>();
-                for (double phase = 0; phase <= 2 * Math.PI; phase += Math.PI / 100) {
-                    list3.add(calculate3(phase, psi).getY());
-                    System.out.println("h = " + h);
-                    System.out.println("psi = " + psi);
-                    System.out.println("phase = " + phase);
-                    System.out.println("-------------");
-                }
-                ew3.addColumn("h = " + h, list3);
+
+        double H3 = 0.001;
+        double PSI3 = 10 * Math.PI / 8;
+        double PHASE3 = 0.9 * Math.PI;
+
+        Calculator3 c33 = new Calculator3(H3, PSI3, PHASE3);
+
+        while (c33.t < 3)
+            c33.iteration(false);
+        while (c33.t < 4)
+            c33.iteration(true);
+
+        Draw2DGraphic.draw(c33.locationList, "test");
+
+
+
+        System.exit(0);
+        double H = 0.001;
+        double PSI = 10 * Math.PI / 8;
+
+        ExcelWriter ew33 = new ExcelWriter();
+        int counter = 0;
+        int c = 1;
+        double PHASE = 0;
+        double step = Math.PI / 100.0;
+        while (true) {
+            if (PHASE > 2 * Math.PI + 0.001)
+                break;
+            PHASE += step;
+            System.out.println(++counter);
+            if (counter == 50) {
+                c++;
+                counter = 0;
             }
+            Calculator3 c3 = new Calculator3(H, PSI, PHASE);
+            double t_wait = 3;
+            double t_run = 1;
 
+            while (c3.t < t_wait)
+                c3.iteration(false);
+            while (c3.t < t_wait + t_run)
+                c3.iteration(true);
 
-        ew3.write("Magnus3");
-        System.exit(0);
-
-
-
-
-
-
-
-        double nk = 1.5;
-        int mc = 0;
-        Calculator2 calcC = new Calculator2();
-        Calculator2.PSI0 = Math.PI * nk;
-
-        while (++mc < 0) {
-            while (calcC.t < mc)
-                calcC.iteration(false);
-            System.out.println(mc);
+            ew33.addVectorList("H" + c, c3.locationList, "x", "y");
+            ew33.addColumn("H" + c, new ArrayList<Double>());
         }
+        ew33.write("psi = " + PSI);
 
-        while (++mc < 50) {
-            while (calcC.t < mc)
-                calcC.iteration(true);
-            System.out.println(mc);
+
+
+
+
+
+
+        System.exit(0);
+        double psi_step = Math.PI / 8;
+        double phase_step = Math.PI / 100;
+        ExcelWriter ew3 = new ExcelWriter();
+        for (int h = 0; h > -7; h--) {
+            for (double psi = psi_step; psi <= 10 * Math.PI; psi += psi_step) {
+                ArrayList<Double> list3 = new ArrayList<>();
+                for (double phase = 0; phase <= 2 * Math.PI; phase += phase_step)
+                    list3.add(calculate(Math.pow(10, h), psi, phase).getY());
+                System.out.println("h = " + Math.pow(10, h));
+                System.out.println("psi = " + psi);
+                System.out.println("-------------");
+                ew3.addColumn("h = " + Math.pow(10, h), list3);
+            }
+            ew3.write("Magnus3");
         }
-        ExcelWriter eww = new ExcelWriter();
-        eww.addVectorList("magnetizationList", calcC.magnetizationList);
-        eww.addVectorList("locationList", calcC.locationList);
-        eww.addVectorList("fieldList", calcC.fieldList);
-        eww.write("psi="+nk+"pi");
-
-        System.exit(0);
-
-
-
-
-
-
-
-        double theta = 0.25 * Math.PI;
-        double phi = 1 * Math.PI ;
-
-        Calculator2 c = calculate(theta, phi);
-        ExcelWriter ew = new ExcelWriter();
-        ew.addVectorList("magnetizationList", c.magnetizationList);
-        ew.addVectorList("locationList", c.locationList);
-        ew.addVectorList("fieldList", c.fieldList);
-        ew.write("Magnus");
-
-
-        System.exit(0);
-
-        ArrayList<Vector> list = new ArrayList<>();
-        for (double i = 0; i <= 10 * Math.PI; i += Math.PI / 20) {
-            list.add(calculate(i));
-            System.out.println(i / Math.PI);
-        }
-        ew.rest();
-        ew.addVectorList("list", list);
-        ew.write("Magnus");
-
-        System.exit(0);
-
-        int m = 3;
-   //     m = 30;
-        int n = 1;
-        Calculator2 calc = new Calculator2();
-
-        while (calc.t < m)
-            calc.iteration(false);
-
-        while (calc.t < m + n)
-            calc.iteration(true);
-
-        ew.rest();
-        ew.addVectorList("calc.locationList", calc.locationList);
-        ew.addVectorList("calc.magnetizationList", calc.magnetizationList);
-        ew.addVectorList("calc.fieldList", calc.fieldList);
-        ew.write("Magnus");
-
-        System.out.println(calc.getAverU().getX());
-        System.out.println(calc.getAverU().getY());
-        System.out.println(calc.getAverU().getZ());
-
-
     }
 
 
@@ -136,10 +106,8 @@ public class Main {
     }
 
 
-    private static Vector calculate3 (double phase, double psi_max) {
-        Calculator3 c3 = new Calculator3();
-        Calculator3.PHASE = phase;
-        Calculator3.PSI_MAX = psi_max;
+    private static Vector calculate (double h, double psi, double phase) {
+        Calculator3 c3 = new Calculator3(h, psi, phase);
 
         double t_wait = 3;
         double t_run = 1;

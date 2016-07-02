@@ -2,22 +2,31 @@ import java.util.ArrayList;
 
 public class Calculator3 {
 
-    public static  double PSI_MAX = 0.5 * Math.PI;
-    private static final double DERRIVATE_dt = Math.pow(10, -8);
-    private static final double dt = Math.pow(10, -4);
-    public static double PHASE = 0.5 * Math.PI;
+    public double PSI_MAX = 0.5 * Math.PI;
+    public double DERRIVATE_dt = Math.pow(10, -8);
+    public double dt = Math.pow(10, -4);
+    public double PHASE = 0.5 * Math.PI;
 
 
-    private static final double R = 2 * Math.pow(10, -6);
-    private static final double ABS_M = 3.89 * 1000 / (4 * Math.PI);
-    private static final double ABS_H = 0.0001 * ABS_M;
-    private static final double ETA = 8.9 * Math.pow(10, -3);
-    private static final double b = 2.5 * Math.pow(10, -6);
-    private static final double OMEGA = Math.pow(10, 3);
-    private static final double RHO = 1;
+    public double R = 2 * Math.pow(10, -6);
+    public double ABS_M = 3.89 * 1000 / (4 * Math.PI);
+    public double ABS_H;
+    public double ETA = 8.9 * Math.pow(10, -3);
+    public double b = 2.5 * Math.pow(10, -6);
+    public double OMEGA = Math.pow(10, 3);
+    public double RHO = 1;
 
-    private static final double ALPHA = getAlpha();
-    private static final double GAMMA = getGamma();
+    public double ALPHA;
+    public double GAMMA;
+
+
+    public Calculator3(double h, double psi, double phase) {
+        this.ABS_H = h * ABS_M;
+        this.PSI_MAX = psi;
+        this.PHASE = phase;
+        this.ALPHA = getAlpha();
+        this.GAMMA = getGamma();
+    }
 
 
     private double ksi = 0;
@@ -26,7 +35,7 @@ public class Calculator3 {
     public ArrayList<Vector> locationList = new ArrayList<>();
 
 
-    private static Vector getU(double ksi, double t) {
+    private Vector getU(double ksi, double t) {
         return new Vector(1, GAMMA * Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
     }
 
@@ -63,20 +72,20 @@ public class Calculator3 {
     }
 
 
-    private static double getdPsi(double t) {
+    private double getdPsi(double t) {
         return (getPsi(t + DERRIVATE_dt) - getPsi(t)) / DERRIVATE_dt;
     }
 
-    private static double getPsi(double t) {
+    private double getPsi(double t) {
         return PSI_MAX * 2 / Math.PI * Math.asin(Math.sin(2 * Math.PI * t + PHASE));
     }
 
-    private static double getAlpha() {
+    private double getAlpha() {
         return Math.PI * ABS_M * ABS_H * Math.pow(R, 3) /
                 (3 * ETA * Math.pow(b, 3) * OMEGA);
     }
 
-    private static double getGamma() {
+    private double getGamma() {
         return RHO * ABS_M * ABS_H * Math.pow(R, 3) / (36 * ETA * ETA * b);
     }
 
