@@ -10,11 +10,11 @@ import java.util.ListIterator;
 
 public class Draw2DGraphic {
 
-    private final static int sizeW = 2000;
-    private final static int sizeH = 1000;
+    private final static int sizeX = 2000;
+    private final static int sizeY = 1000;
 
     public static void draw(ArrayList<Vector> c, String name) {
-        BufferedImage bi = new BufferedImage(sizeW, sizeH,
+        BufferedImage bi = new BufferedImage(sizeX, sizeY,
                 BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
 
@@ -24,8 +24,18 @@ public class Draw2DGraphic {
         wright(getComponentsList(c, "z"), g, Color.GREEN);
 
         g.setColor(Color.BLACK);
-        g.drawLine(0, sizeH/2, sizeW, sizeH/2);
+        g.drawLine(0, sizeY /2, sizeX, sizeY /2);
 
+        save(bi, new File(name + ".png"));
+    }
+
+    public static void draw2D(ArrayList<Vector> c, String name) {
+        BufferedImage bi = new BufferedImage(sizeX, sizeY,
+                BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
+
+        g.setStroke(new BasicStroke(3));
+        wright(getComponentsList(c, "x"), getComponentsList(c, "y"), g, Color.BLUE);
         save(bi, new File(name + ".png"));
     }
 
@@ -40,22 +50,13 @@ public class Draw2DGraphic {
         return result;
     }
 
-    public static void wright(List<Double> list, String name) {
-        BufferedImage bi = new BufferedImage(sizeW, sizeH,
-                BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
-        g.setStroke(new BasicStroke(3));
-        wright(list, g, Color.BLACK);
-        save(bi, new File(name + ".png"));
-    }
-
     private static void wright(List<Double> list, Graphics2D g, Color color) {
 
         ListIterator<Double> iter = list.listIterator();
         double y1 = iter.next();
         double y2 = iter.next();
 
-        double step = (double) sizeW / (double) list.size();
+        double step = (double) sizeX / (double) list.size();
 
         double x1 = 0;
         double x2 = step;
@@ -63,8 +64,8 @@ public class Draw2DGraphic {
         g.setColor(color);
         while (iter.hasNext()) {
             g.drawLine(
-                    (int) x1, (int) Math.abs(sizeH /2 * (y1 - 1)),
-                    (int) x2, (int) Math.abs(sizeH /2 * (y2 - 1)));
+                    (int) x1, (int) Math.abs(sizeY /2 * (y1 - 1)),
+                    (int) x2, (int) Math.abs(sizeY /2 * (y2 - 1)));
 
             x1 = x2;
             x2 += step;
@@ -76,6 +77,48 @@ public class Draw2DGraphic {
     }
 
 
+
+    public static void wright(List<Double> list, String name) {
+        BufferedImage bi = new BufferedImage(sizeX, sizeY,
+                BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
+        g.setStroke(new BasicStroke(3));
+        wright(list, g, Color.BLACK);
+        save(bi, new File(name + ".png"));
+    }
+
+    private static void wright(List<Double> listX, List<Double> listY, Graphics2D g, Color color) {
+
+        double xMin = getMin(listX);
+        double xMax = getMax(listX);
+        double yMin = getMin(listY);
+        double yMax = getMax(listY);
+
+        double x = sizeX / (xMax - xMin);
+        double y = sizeY / (yMax - yMin);
+
+        ListIterator<Double> iterX = listX.listIterator();
+        ListIterator<Double> iterY = listY.listIterator();
+        double x1 = (iterX.next() - xMin) * x;
+        double x2 = (iterX.next() - xMin) * x;
+        double y1 = (iterY.next() - yMin) * y;
+        double y2 = (iterY.next() - yMin) * y;
+
+        g.setColor(color);
+        while (iterX.hasNext()) {
+            g.drawLine((int) x1, (int) y1, (int) x2, (int) y2 );
+            x1 = x2;
+            y1 = y2;
+            x2 = (iterX.next() - xMin) * x;
+            y2 = (iterY.next() - yMin) * y;
+        }
+        g.setColor(Color.BLACK);
+        g.setFont(new Font (Font.DIALOG, 1, (int) (0.02 * sizeX)));
+        g.drawString("" + yMin, 0, (int) (0.03*(yMax - yMin) * y));
+        g.drawString("" + yMax, 0, (int) ((yMax - yMin) * y));
+    }
+
+
     public static void normal(List<Double> list, String name) {
 
         List<Double> tempList = new ArrayList<>();
@@ -84,7 +127,7 @@ public class Draw2DGraphic {
         double min = getMin(list);
         double max = getMax(list);
 
-        double normal = sizeH / (max - min);
+        double normal = sizeY / (max - min);
 
 
         for (double e : list)
@@ -100,7 +143,7 @@ public class Draw2DGraphic {
             //	if (++counter > div)
             newList.add(-e + maxTemp);
 
-        BufferedImage bi = new BufferedImage(sizeW, sizeH,
+        BufferedImage bi = new BufferedImage(sizeX, sizeY,
                 BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
         g.setStroke(new BasicStroke(3));
@@ -112,7 +155,7 @@ public class Draw2DGraphic {
         double y1 = iter.next();
         double y2 = iter.next();
 
-        double step = (double) sizeW / (double) newList.size();
+        double step = (double) sizeX / (double) newList.size();
 
         double x1 = 0;
         double x2 = step;

@@ -33,6 +33,7 @@ public class Calculator3 {
     public double t = 0;
     private Vector L = new Vector();
     public ArrayList<Vector> locationList = new ArrayList<>();
+    public ArrayList<Double> ksiList = new ArrayList<>();
 
 
     private Vector getU(double ksi, double t) {
@@ -52,6 +53,7 @@ public class Calculator3 {
         Vector U = getU(ksi, t);
         L = L.plus(U.multiply(dt));
         if (isWrite) {
+            ksiList.add(ksi);
             counter_aver_u++;
             averageU = averageU.plus(U);
             locationList.add(L);

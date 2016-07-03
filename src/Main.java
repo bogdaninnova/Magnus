@@ -4,28 +4,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-        double H3 = 0.001;
-        double PSI3 = 10 * Math.PI / 8;
-        double PHASE3 = 0.9 * Math.PI;
-
-        Calculator3 c33 = new Calculator3(H3, PSI3, PHASE3);
-
-        while (c33.t < 3)
-            c33.iteration(false);
-        while (c33.t < 4)
-            c33.iteration(true);
-
-        Draw2DGraphic.draw(c33.locationList, "test");
-
-
+        Calculator3 c34 = new Calculator3(0.001, 0.5 * Math.PI, 0 * Math.PI);
+        ExcelWriter ew34 = new ExcelWriter();
+        while (c34.t < 3)
+            c34.iteration(false);
+        while (c34.t < 4)
+            c34.iteration(true);
+        ew34.addColumn("ksiList", c34.ksiList);
+        ew34.write("ksiList");
 
         System.exit(0);
         double H = 0.001;
         double PSI = 10 * Math.PI / 8;
 
-        ExcelWriter ew33 = new ExcelWriter();
         int counter = 0;
-        int c = 1;
         double PHASE = 0;
         double step = Math.PI / 100.0;
         while (true) {
@@ -33,10 +25,6 @@ public class Main {
                 break;
             PHASE += step;
             System.out.println(++counter);
-            if (counter == 50) {
-                c++;
-                counter = 0;
-            }
             Calculator3 c3 = new Calculator3(H, PSI, PHASE);
             double t_wait = 3;
             double t_run = 1;
@@ -46,10 +34,8 @@ public class Main {
             while (c3.t < t_wait + t_run)
                 c3.iteration(true);
 
-            ew33.addVectorList("H" + c, c3.locationList, "x", "y");
-            ew33.addColumn("H" + c, new ArrayList<Double>());
+            Draw2DGraphic.draw2D(c3.locationList, "PHASE = " + PHASE);
         }
-        ew33.write("psi = " + PSI);
 
 
 
