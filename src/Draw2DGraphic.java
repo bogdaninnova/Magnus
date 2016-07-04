@@ -35,7 +35,20 @@ public class Draw2DGraphic {
         Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
 
         g.setStroke(new BasicStroke(3));
-        wright(getComponentsList(c, "x"), getComponentsList(c, "y"), g, Color.BLUE);
+        wright(getComponentsList(c, "x"), getComponentsList(c, "y"), g, Color.BLUE, Color.RED);
+        save(bi, new File(name + ".png"));
+    }
+
+    public static void draw2dDouble(ArrayList<Double> c, String name) {
+        BufferedImage bi = new BufferedImage(sizeX, sizeY,
+                BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = getBackgroundedGraphics2D(bi, Color.white);
+        g.setStroke(new BasicStroke(3));
+        ArrayList<Double> xList = new ArrayList<>();
+        double counter = 0;
+        for (Double a : c)
+            xList.add(counter++);
+        wright(xList, c, g, Color.BLUE, Color.BLUE);
         save(bi, new File(name + ".png"));
     }
 
@@ -87,7 +100,7 @@ public class Draw2DGraphic {
         save(bi, new File(name + ".png"));
     }
 
-    private static void wright(List<Double> listX, List<Double> listY, Graphics2D g, Color color) {
+    private static void wright(List<Double> listX, List<Double> listY, Graphics2D g, Color colorASC, Color colorDESC) {
 
         double xMin = getMin(listX);
         double xMax = getMax(listX);
@@ -104,7 +117,10 @@ public class Draw2DGraphic {
         double y1 = (iterY.next() - yMin) * y;
         double y2 = (iterY.next() - yMin) * y;
 
-        g.setColor(color);
+        if (listY.get(0) < listX.get(listX.size() - 1))
+            g.setColor(colorASC);
+        else
+            g.setColor(colorDESC);
         while (iterX.hasNext()) {
             g.drawLine((int) x1, (int) y1, (int) x2, (int) y2 );
             x1 = x2;
@@ -114,8 +130,8 @@ public class Draw2DGraphic {
         }
         g.setColor(Color.BLACK);
         g.setFont(new Font (Font.DIALOG, 1, (int) (0.02 * sizeX)));
-        g.drawString("" + yMin, 0, (int) (0.03*(yMax - yMin) * y));
-        g.drawString("" + yMax, 0, (int) ((yMax - yMin) * y));
+        g.drawString("" + yMax, 0, (int) (0.03*(yMax - yMin) * y));
+        g.drawString("" + yMin, 0, (int) ((yMax - yMin) * y));
     }
 
 

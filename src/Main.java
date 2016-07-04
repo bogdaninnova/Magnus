@@ -4,24 +4,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Calculator3 c34 = new Calculator3(0.001, 0.5 * Math.PI, 0 * Math.PI);
-        ExcelWriter ew34 = new ExcelWriter();
-        while (c34.t < 3)
-            c34.iteration(false);
-        while (c34.t < 4)
-            c34.iteration(true);
-        ew34.addColumn("ksiList", c34.ksiList);
-        ew34.write("ksiList");
-
-        System.exit(0);
         double H = 0.001;
-        double PSI = 10 * Math.PI / 8;
+        double PSI = 10*Math.PI / 8;
+        double PHASE = 0;
+//
+//
+//        Calculator3 c34 = new Calculator3(H, PSI, PHASE);
+//        while (c34.t < 3)
+//            c34.iteration(false);
+//        while (c34.t < 10)
+//            c34.iteration(true);
+//        Draw2DGraphic.draw2dDouble(c34.ksiList, "PSI = " + PSI);
+//        System.exit(0);
 
         int counter = 0;
-        double PHASE = 0;
+
         double step = Math.PI / 100.0;
         while (true) {
-            if (PHASE > 2 * Math.PI + 0.001)
+            if (PHASE > 10 * Math.PI + 0.001)
                 break;
             PHASE += step;
             System.out.println(++counter);
@@ -34,7 +34,8 @@ public class Main {
             while (c3.t < t_wait + t_run)
                 c3.iteration(true);
 
-            Draw2DGraphic.draw2D(c3.locationList, "PHASE = " + PHASE);
+            Draw2DGraphic.draw2D(c3.locationList, "PHASE (Location) = " + PHASE);
+            Draw2DGraphic.draw2dDouble(c3.ksiList, "PHASE (KSI) = " + PHASE);
         }
 
 
