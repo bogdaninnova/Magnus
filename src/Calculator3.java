@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class Calculator3 {
 
     public double PSI_MAX = 0.5 * Math.PI;
-    public double DERRIVATE_dt = Math.pow(10, -8);
-    public double dt = Math.pow(10, -4);
+    public double DERRIVATE_dt = Math.pow(10, -9);
+    public double dt = Math.pow(10, -5);
     public double PHASE = 0.5 * Math.PI;
 
 
