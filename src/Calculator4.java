@@ -1,11 +1,10 @@
 import java.util.ArrayList;
 
-public class Calculator3 {
+public class Calculator4 {
 
-    public double PSI_MAX = 0.5 * Math.PI;
-    public double DERRIVATE_dt = Math.pow(10, -11);
-    public double dt = Math.pow(10, -7);
-    public double PHASE = 0.5 * Math.PI;
+    public double PSI_MAX;
+    public double dt = Math.pow(10, -5);
+    public double PHASE;
 
 
     public double R = 2 * Math.pow(10, -6);
@@ -20,7 +19,7 @@ public class Calculator3 {
     public double GAMMA;
 
 
-    public Calculator3(double h, double psi, double phase) {
+    public Calculator4(double h, double psi, double phase) {
         this.ABS_H = h * ABS_M;
         this.PSI_MAX = psi;
         this.PHASE = phase;
@@ -32,20 +31,14 @@ public class Calculator3 {
     private double ksi = 0;
     public double t = 0;
     private Vector L = new Vector();
-    public ArrayList<Vector> locationList = new ArrayList<>();
-    public ArrayList<Double> ksiList = new ArrayList<>();
 
 
     private Vector getU(double ksi, double t) {
         return new Vector(1, GAMMA * Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
     }
 
-    private Vector averageU = new Vector();
-    private double counter_aver_u = 0;
-
-    public Vector getAverageU() {
-        return averageU.multiply(1d / counter_aver_u);
-    }
+    public double Is = 0;
+    public double Ic = 0;
 
     public void iteration(boolean isWrite) {
         ksi += getdKsi();
@@ -53,10 +46,8 @@ public class Calculator3 {
         Vector U = getU(ksi, t);
         L = L.plus(U.multiply(dt));
         if (isWrite) {
-            ksiList.add(ksi);
-            counter_aver_u++;
-            averageU = averageU.plus(U);
-            locationList.add(L);
+            Is += Math.sin(ksi) * Math.sin(2 * Math.PI * t);
+            Ic += Math.sin(ksi) * Math.cos(2 * Math.PI * t);
         }
     }
 
@@ -75,16 +66,9 @@ public class Calculator3 {
 
 
     private double getdPsi(double t) {
-        return (getPsi2(t + DERRIVATE_dt) - getPsi2(t)) / DERRIVATE_dt;
+        return 2 * Math.PI * PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
     }
 
-    private double getPsi2(double t) {
-        return PSI_MAX * 2 / Math.PI * Math.asin(Math.sin(2 * Math.PI * t + PHASE));
-    }
-
-    private double getPsi(double t) {
-        return PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
-    }
 
     private double getAlpha() {
         return Math.PI * ABS_M * ABS_H * Math.pow(R, 3) /
