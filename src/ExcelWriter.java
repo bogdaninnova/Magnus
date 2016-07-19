@@ -15,10 +15,10 @@ public class ExcelWriter {
     private Workbook wb;
 
     public ExcelWriter() {
-        rest();
+        reset();
     }
 
-    public void rest() {
+    public void reset() {
         wb = new HSSFWorkbook();
     }
 
