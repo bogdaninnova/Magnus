@@ -7,17 +7,23 @@ public class Main {
 
     public static void main(String[] args) {
 
+        double al = Math.pow(10, 0);
+        Calculator4 c = new Calculator4(al, 0.25 * al, 0);
+        double t = 15;
+        while (c.t < t)
+            c.iteration(false);
+        while (c.t < t + 1)
+            c.iteration(true);
+        TextWriter.writeDoubleList(c.ksiListTheor, "ksiListTheor");
+        TextWriter.writeDoubleList(c.ksiList, "ksiList");
+        TextWriter.writeDoubleList(c.sList, "sList");
+        TextWriter.writeDoubleList(c.sTheorList, "sTheorList");
 
-//        Calculator4 c = new Calculator4(1, 0.25 * 1, 0);
-//        double t = 15;
-//        while (c.t < t)
-//            c.iteration(false);
-//        while (c.t < t + 1)
-//            c.iteration(true);
-//        TextWriter.writeDoubleList(c.ksiListTheor, "ksiListTheor");
-//        TextWriter.writeDoubleList(c.ksiList, "ksiList");
-//
-//        System.exit(0);
+        System.exit(0);
+
+
+
+
         ExcelWriter ew = new ExcelWriter();
 
         for (int alp = -5; alp <= 5; alp++) {
@@ -38,22 +44,22 @@ public class Main {
         ew.write("ksiTheor");
     }
 
-
-
-    private static ArrayList<Double> calculate42(double alpha, double PSI) {
-
-        ArrayList<Double> list = new ArrayList<>();
-        for (double phase = 0; phase <= 2 * Math.PI; phase += round(phase + 0.1, 1)) {
-            Calculator4 c = new Calculator4(alpha, PSI, phase * Math.PI);
-            double time = 5;
-            while (c.t < time)
-                c.iteration(false);
-            while (c.t < time+1)
-                c.iteration(true);
-            list.add(c.Is);
-        }
-        return list;
-    }
+//
+//
+//    private static ArrayList<Double> calculate42(double alpha, double PSI) {
+//
+//        ArrayList<Double> list = new ArrayList<>();
+//        for (double phase = 0; phase <= 2 * Math.PI; phase += round(phase + 0.1, 1)) {
+//            Calculator4 c = new Calculator4(alpha, PSI, phase * Math.PI);
+//            double time = 5;
+//            while (c.t < time)
+//                c.iteration(false);
+//            while (c.t < time+1)
+//                c.iteration(true);
+//            list.add(c.Is);
+//        }
+//        return list;
+//    }
 
 
     public static double round(double value, int places) {

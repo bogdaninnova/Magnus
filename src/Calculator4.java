@@ -22,10 +22,12 @@ public class Calculator4 {
     private double ksi = 0;
     public double t = 0;
 
-    public double Is = 0;
-    public double Ic = 0;
+    public double sGamma = 0;
+    public double sTheorGamma = 0;
 
-    public ArrayList<Double> IsList = new ArrayList<>();
+    public ArrayList<Double> sList = new ArrayList<>();
+    public ArrayList<Double> sTheorList = new ArrayList<>();
+
     public ArrayList<Double> ksiList = new ArrayList<>();
     public ArrayList<Double> ksiListTheor = new ArrayList<>();
 
@@ -44,23 +46,42 @@ public class Calculator4 {
         t += dt;
         Vector U = getU(ksi, t);
         L = L.plus(U.multiply(dt));
-        Is += Math.sin(ksi) * Math.sin(2 * Math.PI * t);
-        Ic += Math.sin(ksi) * Math.cos(2 * Math.PI * t);
+
         if (isWrite) {
             counter++;
 
             if (counter == 10) {
-                track.add(L);
-                IsList.add(Is);
-                ksiList.add(ksi);
                 double currentTime = t - ((int) t);
-                if (currentTime < 0.5)
+
+                track.add(L);
+
+                if (currentTime < 0.5) {
+                    double q = getQ(currentTime);
+                    sTheorGamma += (1 - q * q) / (1 + q * q)
+                            * Math.sin(2 * Math.PI * currentTime - PHASE);
+                } else {
+                    double q = getQ(currentTime - 0.5);
+                    sTheorGamma += (1 - q * q) / (1 + q * q)
+                            * Math.sin(2 * Math.PI * (currentTime - 0.5) - PHASE);
+                }
+                sTheorList.add(sTheorGamma);
+
+                sGamma += Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE);
+                sList.add(sGamma);
+
+                ksiList.add(ksi);
+                if (currentTime < 0.5) {
                     ksiListTheor.add(getKsiTheor(currentTime));
-                else
+                } else {
                     ksiListTheor.add(-getKsiTheor(currentTime - 0.5));
+                }
                 counter = 0;
             }
         }
+    }
+
+    private double getQ(double t) {
+        return ALPHA * t + Math.sqrt(1 + Math.pow(ALPHA/4, 2)) - ALPHA / 4;
     }
 
     private double getKsiTheor(double t) {
