@@ -105,14 +105,12 @@ public class Calculator4 {
     }
 
     private double getdPsi(double t) {
-        return (getPsi2(t + DERRIVATE_dt) - getPsi2(t)) / DERRIVATE_dt;
+        return (getPsi(t + DERRIVATE_dt) - getPsi(t)) / DERRIVATE_dt;
     }
 
-    private double getPsi2(double t) {
+    private double getPsi(double t) {
         return PSI_MAX * 2 / Math.PI * Math.asin(Math.cos(2 * Math.PI * t + PHASE));
     }
-
-
 
     private double getdPsi2(double t) {
         return 2 * Math.PI * PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
