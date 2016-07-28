@@ -31,29 +31,32 @@ public class Calculator4 {
     public ArrayList<Double> ksiList = new ArrayList<>();
     public ArrayList<Double> ksiListTheor = new ArrayList<>();
 
-    int counter = 0;
 
 
-    private Vector L = new Vector();
-    public ArrayList<Vector> track = new ArrayList<>();
-    private Vector getU(double ksi, double t) {
-        return new Vector(1, Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
-    }
+    int init_counter = 2000;
+    int counter = init_counter-1;
+
+
+//    private Vector L = new Vector();
+//    public ArrayList<Vector> track = new ArrayList<>();
+//    private Vector getU(double ksi, double t) {
+//        return new Vector(1, Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
+//    }
 
 
     public void iteration(boolean isWrite) {
         ksi += getdKsi();
         t += dt;
-        Vector U = getU(ksi, t);
-        L = L.plus(U.multiply(dt));
+        //Vector U = getU(ksi, t);
+        //L = L.plus(U.multiply(dt));
 
         if (isWrite) {
             counter++;
 
-            if (counter == 10) {
+            if (counter == init_counter) {
                 double currentTime = t - ((int) t);
 
-                track.add(L);
+//                track.add(L);
 
                 if (currentTime < 0.5) {
                     double q = getQ(currentTime);

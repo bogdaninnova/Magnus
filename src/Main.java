@@ -6,23 +6,36 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-
-//        double al = Math.pow(10, 0);
-//        Calculator4 c = new Calculator4(al, 0.25 * al, 0);
-//        double t = 15;
-//        while (c.t < t)
-//            c.iteration(false);
-//        while (c.t < t + 1)
-//            c.iteration(true);
-//        TextWriter.writeDoubleList(c.ksiListTheor, "ksiListTheor");
-//        TextWriter.writeDoubleList(c.ksiList, "ksiList");
-//        TextWriter.writeDoubleList(c.sList, "sList");
-//        TextWriter.writeDoubleList(c.sTheorList, "sTheorList");
-//
-//        System.exit(0);
-
-
         ExcelWriter ew = new ExcelWriter();
+
+//        for (int a = -5; a <= 5; a++) {
+//            double alpha = Math.pow(10, a);
+//            System.out.println(Math.atan(alpha/4));
+//        }
+
+        for (int al = -5; al <= 0; al++) {
+            System.out.println(new Date());
+            System.out.println(al);
+            double alpha = Math.pow(10, al);
+            Calculator4 c0 = new Calculator4(alpha, 0.25 * alpha, 0);
+            double t = 0;
+            while (c0.t < t)
+                c0.iteration(false);
+            while (c0.t < t + 1000)
+                c0.iteration(true);
+
+            ew.addColumn("ksiList" + alpha, c0.ksiList);
+            ew.addColumn("ksiList" + alpha, c0.ksiListTheor);
+            ew.addColumn("ksiList" + alpha, minus(c0.ksiListTheor, c0.ksiList));
+            ew.addColumn("sList" + alpha, c0.sList);
+            ew.addColumn("sList" + alpha, c0.sTheorList);
+
+            ew.write("gl");
+        }
+        System.exit(0);
+
+
+
         String name = "alpha = 10^-5 - 10^5";
         String nameTheor = "(th)alpha = 10^-5 - 10^5";
         for (int alp = 5; alp <= 5; alp++) {
@@ -47,6 +60,14 @@ public class Main {
 
         ew.write("S_lists");
 
+    }
+
+
+    private static ArrayList<Double> minus(ArrayList<Double> list2, ArrayList<Double> list1) {
+        ArrayList<Double> list = new ArrayList<>();
+        for (int i = 0; i < list2.size(); i++)
+            list.add(list2.get(i) - list1.get(i));
+        return list;
     }
 
 
