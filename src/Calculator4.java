@@ -4,7 +4,7 @@ public class Calculator4 {
 
 
     public double dt = Math.pow(10, -5);
-    public double DERRIVATE_dt = Math.pow(10, -11);
+    public double DERRIVATE_dt = Math.pow(10, -5);
 
     public double PHASE;
     public double PSI_MAX;
@@ -33,7 +33,7 @@ public class Calculator4 {
 
 
 
-    int init_counter = 2000;
+    int init_counter = 10;
     int counter = init_counter-1;
 
 

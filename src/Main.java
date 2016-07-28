@@ -13,26 +13,26 @@ public class Main {
 //            System.out.println(Math.atan(alpha/4));
 //        }
 
-        for (int al = -5; al <= 0; al++) {
-            System.out.println(new Date());
-            System.out.println(al);
-            double alpha = Math.pow(10, al);
-            Calculator4 c0 = new Calculator4(alpha, 0.25 * alpha, 0);
-            double t = 0;
-            while (c0.t < t)
-                c0.iteration(false);
-            while (c0.t < t + 1000)
-                c0.iteration(true);
-
-            ew.addColumn("ksiList" + alpha, c0.ksiList);
-            ew.addColumn("ksiList" + alpha, c0.ksiListTheor);
-            ew.addColumn("ksiList" + alpha, minus(c0.ksiListTheor, c0.ksiList));
-            ew.addColumn("sList" + alpha, c0.sList);
-            ew.addColumn("sList" + alpha, c0.sTheorList);
-
-            ew.write("gl");
-        }
-        System.exit(0);
+//        for (int al = 0; al <= 5; al++) {
+//            System.out.println(new Date());
+//            System.out.println(al);
+//            double alpha = Math.pow(10, al);
+//            Calculator4 c0 = new Calculator4(alpha, 0.25 * alpha, 0);
+//            double t = 0;
+//            while (c0.t < t)
+//                c0.iteration(false);
+//            while (c0.t < t + 100)
+//                c0.iteration(true);
+//
+//            ew.addColumn("ksiList" + alpha, c0.ksiList);
+//            ew.addColumn("ksiList" + alpha, c0.ksiListTheor);
+////            ew.addColumn("ksiList" + alpha, minus(c0.ksiListTheor, c0.ksiList));
+////            ew.addColumn("sList" + alpha, c0.sList);
+////            ew.addColumn("sList" + alpha, c0.sTheorList);
+//
+//            ew.write("gl -- 100");
+//        }
+//        System.exit(0);
 
 
 
@@ -45,7 +45,7 @@ public class Main {
             for (double phase = 0; phase <= 2; phase = round(phase + 0.1, 1)) {
                 System.out.println("alpha = " + Math.pow(10, alp) + "; phase = " + phase + "; " + new Date());
                 Calculator4 c = new Calculator4(alpha, 0.25 * alpha, phase * Math.PI);
-                double time = 5;
+                double time = 10;
                 while (c.t < time)
                     c.iteration(false);
                 while (c.t < time+1)
