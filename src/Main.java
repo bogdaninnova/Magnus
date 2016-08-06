@@ -35,30 +35,24 @@ public class Main {
 //        System.exit(0);
 
 
-
-        String name = "alpha = 10^-5 - 10^5";
-        String nameTheor = "(th)alpha = 10^-5 - 10^5";
-        for (int alp = 5; alp <= 5; alp++) {
-            double alpha = Math.pow(10, alp);
+        double phase = 0;
+        String name = "10 - 1000";
+        for (double alpha = 10; alpha <= 1000; alpha += 10) {
             ArrayList<Double> listS = new ArrayList<>();
-            ArrayList<Double> listSTheor = new ArrayList<>();
-            for (double phase = 0; phase <= 2; phase = round(phase + 0.1, 1)) {
-                System.out.println("alpha = " + Math.pow(10, alp) + "; phase = " + phase + "; " + new Date());
-                Calculator4 c = new Calculator4(alpha, 0.25 * alpha, phase * Math.PI);
-                double time = 10;
+            for (double psi = 10; psi <= 1000; psi += 10) {
+                System.out.println("alpha = " + alpha + "; psi = " + psi + "; " + new Date());
+                Calculator4 c = new Calculator4(alpha, psi, phase);
+                double time = 5;
                 while (c.t < time)
                     c.iteration(false);
-                while (c.t < time+1)
+                while (c.t < time+0.5)
                     c.iteration(true);
                 listS.add(c.sGamma);
-                listSTheor.add(c.sTheorGamma);
             }
             ew.addColumn(name, listS);
-            ew.addColumn(name, listSTheor);
-            //ew.addColumn(nameTheor, listSTheor);
         }
 
-        ew.write("S_lists");
+        ew.write("phase = " + phase);
 
     }
 

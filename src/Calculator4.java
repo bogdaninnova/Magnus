@@ -4,7 +4,6 @@ public class Calculator4 {
 
 
     public double dt = Math.pow(10, -5);
-    public double DERRIVATE_dt = Math.pow(10, -5);
 
     public double PHASE;
     public double PSI_MAX;
@@ -60,16 +59,16 @@ public class Calculator4 {
 
                 if (currentTime < 0.5) {
                     double q = getQ(currentTime);
-                    sTheorGamma += (1 - q * q) / (1 + q * q)
+                    sTheorGamma += 2 * (1 - q * q) / (1 + q * q)
                             * Math.sin(2 * Math.PI * currentTime - PHASE);
                 } else {
                     double q = getQ(currentTime - 0.5);
-                    sTheorGamma += (1 - q * q) / (1 + q * q)
+                    sTheorGamma += 2 * (1 - q * q) / (1 + q * q)
                             * Math.sin(2 * Math.PI * (currentTime - 0.5) - PHASE);
                 }
                 sTheorList.add(sTheorGamma);
 
-                sGamma += Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE);
+                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime);
                 sList.add(sGamma);
 
                 ksiList.add(ksi);
@@ -108,7 +107,7 @@ public class Calculator4 {
     }
 
     private double getdPsi(double t) {
-        return (getPsi(t + DERRIVATE_dt) - getPsi(t)) / DERRIVATE_dt;
+        return (getPsi(t + dt) - getPsi(t)) / dt;
     }
 
     private double getPsi(double t) {
