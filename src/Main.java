@@ -6,34 +6,59 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
+
+        ArrayList<Double> arrayList = new ArrayList<>();
+        ArrayList<Double> arrayList2 = new ArrayList<>();
+        for (double psi = 0; psi <= 250; psi += 10) {
+            Calculator4 calculator = new Calculator4(4 * psi, psi, 0);
+            double t = 5;
+            while (calculator.t < t)
+                calculator.iteration(false);
+            while (calculator.t < t + 0.5)
+                calculator.iteration(true);
+            arrayList.add(calculator.sGamma);
+            arrayList2.add(calculator.sTheorGamma);
+            System.out.println(psi);
+        }
+        TextWriter.writeDoubleList(arrayList, "arrayList4Psi");
+        TextWriter.writeDoubleList(arrayList2, "arrayList4Psi2");
+
+        System.exit(0);
+
+        double phase = 0;
+        for (double alpha = 490; alpha <= 1000; alpha = round(alpha + 10, 1)) {
+            ArrayList<Double> listS = new ArrayList<>();
+            for (double psi = 0; psi <= 1000; psi = round(psi + 10, 1)) {
+                System.out.println(new Date());
+                System.out.println("alpha = " + alpha);
+                System.out.println("psi = " + psi);
+                Calculator4 calc = new Calculator4(alpha, psi, phase);
+                double time = 5;
+                while (calc.t < time)
+                    calc.iteration(false);
+                while (calc.t < time+0.5)
+                    calc.iteration(true);
+                listS.add(calc.sGamma);
+            }
+            //ew.addColumn(name, listS);
+            TextWriter.writeDoubleList(listS, "alpha = " + alpha);
+        }
+
+        //ew.write("phase = " + phase);
+
+    }
+
+
+    private static ArrayList<Double> minus(ArrayList<Double> list2, ArrayList<Double> list1) {
+        ArrayList<Double> list = new ArrayList<>();
+        for (int i = 0; i < list2.size(); i++)
+            list.add(list2.get(i) - list1.get(i));
+        return list;
+    }
+
+
+    private static void calc() {
         ExcelWriter ew = new ExcelWriter();
-
-//        for (int a = -5; a <= 5; a++) {
-//            double alpha = Math.pow(10, a);
-//            System.out.println(Math.atan(alpha/4));
-//        }
-
-//        for (int al = 0; al <= 5; al++) {
-//            System.out.println(new Date());
-//            System.out.println(al);
-//            double alpha = Math.pow(10, al);
-//            Calculator4 c0 = new Calculator4(alpha, 0.25 * alpha, 0);
-//            double t = 0;
-//            while (c0.t < t)
-//                c0.iteration(false);
-//            while (c0.t < t + 100)
-//                c0.iteration(true);
-//
-//            ew.addColumn("ksiList" + alpha, c0.ksiList);
-//            ew.addColumn("ksiList" + alpha, c0.ksiListTheor);
-////            ew.addColumn("ksiList" + alpha, minus(c0.ksiListTheor, c0.ksiList));
-////            ew.addColumn("sList" + alpha, c0.sList);
-////            ew.addColumn("sList" + alpha, c0.sTheorList);
-//
-//            ew.write("gl -- 100");
-//        }
-//        System.exit(0);
-
 
         double phase = 0;
         String name = "10 - 1000";
@@ -55,54 +80,6 @@ public class Main {
         ew.write("phase = " + phase);
 
     }
-
-
-    private static ArrayList<Double> minus(ArrayList<Double> list2, ArrayList<Double> list1) {
-        ArrayList<Double> list = new ArrayList<>();
-        for (int i = 0; i < list2.size(); i++)
-            list.add(list2.get(i) - list1.get(i));
-        return list;
-    }
-
-
-    private static void calc() {
-        ExcelWriter ew = new ExcelWriter();
-
-        for (int alp = -5; alp <= 5; alp++) {
-            String name = "alpha = 10^" + alp;
-            double alpha = Math.pow(10, alp);
-
-            System.out.println("Alpha = " + alpha);
-
-            Calculator4 c0 = new Calculator4(alpha, 0.25 * alpha, 0);
-            double tim = 50;
-            while (c0.t < tim)
-                c0.iteration(false);
-            while (c0.t < tim + 1)
-                c0.iteration(true);
-            ew.addColumn(name, c0.sList);
-            ew.addColumn(name, c0.sTheorList);
-        }
-        ew.write("sTheor");
-
-    }
-
-
-    private static ArrayList<Double> calculate42(double alpha) {
-
-        ArrayList<Double> list = new ArrayList<>();
-        for (double phase = 0; phase <= 2; phase = round(phase + 0.1, 1)) {
-            Calculator4 c = new Calculator4(alpha, 0.25 * alpha, phase * Math.PI);
-            double time = 5;
-            while (c.t < time)
-                c.iteration(false);
-            while (c.t < time+1)
-                c.iteration(true);
-            list.add(c.sGamma);
-        }
-        return list;
-    }
-
 
     public static double round(double value, int places) {
         if (places < 0)
