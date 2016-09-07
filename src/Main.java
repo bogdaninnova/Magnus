@@ -7,28 +7,45 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ArrayList<Double> arrayList = new ArrayList<>();
-        ArrayList<Double> arrayList2 = new ArrayList<>();
-        for (double psi = 0; psi <= 250; psi += 10) {
-            Calculator4 calculator = new Calculator4(4 * psi, psi, 0);
-            double t = 5;
-            while (calculator.t < t)
-                calculator.iteration(false);
-            while (calculator.t < t + 0.5)
-                calculator.iteration(true);
-            arrayList.add(calculator.sGamma);
-            arrayList2.add(calculator.sTheorGamma);
-            System.out.println(psi);
-        }
-        TextWriter.writeDoubleList(arrayList, "arrayList4Psi");
-        TextWriter.writeDoubleList(arrayList2, "arrayList4Psi2");
+//        double p = 0.001;
+//        for (double psi = 1; psi <= 1; psi += 10) {
+//            Calculator4 calculator0 = new Calculator4(p, 1, 0 * Math.PI);
+//            double t0 = 35;
+//            while (calculator0.t < t0)
+//                calculator0.iteration(false);
+//            while (calculator0.t < t0 + 3)
+//                calculator0.iteration(true);
+//            Draw2DGraphic.draw2D(calculator0.track, "track" + p);
+//        }
+//        System.exit(0);
 
-        System.exit(0);
+//        ArrayList<Double> arrayList = new ArrayList<>();
+//        ArrayList<Double> arrayList2 = new ArrayList<>();
+//        for (double alpha = Math.pow(10, -5); alpha < Math.pow(10, 5); alpha *= 10) {
+//            Calculator4 calculator = new Calculator4(alpha, 0.25 * alpha, 0 * Math.PI);
+//            double t = 5;
+//            while (calculator.t < t)
+//                calculator.iteration(false);
+//            while (calculator.t < t + 0.5)
+//                calculator.iteration(true);
+//            arrayList.add(calculator.sGamma);
+//            arrayList2.add(calculator.sTheorGamma);
+//            System.out.println(alpha);
+//        }
+//        TextWriter.writeDoubleList(arrayList, "array4Psi");
+//        TextWriter.writeDoubleList(arrayList2, "array4Psi2teor");
+//
+////         TextWriter.writeDoubleList(c.ksiListTheor, "ksiListTheor");
+////         TextWriter.writeDoubleList(c.ksiList, "ksiList");
+////         TextWriter.writeDoubleList(c.sList, "sList");
+////         TextWriter.writeDoubleList(c.sTheorList, "sTheorList");
+//
+//        System.exit(0);
 
         double phase = 0;
-        for (double alpha = 490; alpha <= 1000; alpha = round(alpha + 10, 1)) {
+        for (double alpha = 0.01; alpha <= 0.01; alpha = round(alpha + 0.1, 3)) {
             ArrayList<Double> listS = new ArrayList<>();
-            for (double psi = 0; psi <= 1000; psi = round(psi + 10, 1)) {
+            for (double psi = 0; psi <= 500; psi += 10) {
                 System.out.println(new Date());
                 System.out.println("alpha = " + alpha);
                 System.out.println("psi = " + psi);
@@ -39,6 +56,7 @@ public class Main {
                 while (calc.t < time+0.5)
                     calc.iteration(true);
                 listS.add(calc.sGamma);
+                System.out.println(psi);
             }
             //ew.addColumn(name, listS);
             TextWriter.writeDoubleList(listS, "alpha = " + alpha);
