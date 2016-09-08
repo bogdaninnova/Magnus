@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -10,13 +11,21 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils
 {
 
+
+    public static void saveCodeInHistory() {
+        String dir = System.getProperty("user.dir");
+        ZipUtils appZip = new ZipUtils();
+        appZip.generateFileList(new File(dir + "\\src"), dir + "\\src");
+        appZip.zipIt("history\\" + new Date().getTime() + ".zip", dir + "\\src");
+    }
+
     private List<String> fileList;
 
-    public ZipUtils() {
+    private ZipUtils() {
         fileList = new ArrayList<>();
     }
 
-    public void zipIt(String zipFile, String SOURCE_FOLDER)
+    private void zipIt(String zipFile, String SOURCE_FOLDER)
     {
         byte[] buffer = new byte[1024];
         String source = "";
@@ -79,7 +88,7 @@ public class ZipUtils
         }
     }
 
-    public void generateFileList(File node, String SOURCE_FOLDER)
+    private void generateFileList(File node, String SOURCE_FOLDER)
     {
 
         // add file only

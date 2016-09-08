@@ -1,3 +1,4 @@
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -5,19 +6,27 @@ import java.util.Date;
 
 public class Main {
 
-    public static void main(String[] args) {
 
-//        double p = 0.001;
-//        for (double psi = 1; psi <= 1; psi += 10) {
-//            Calculator4 calculator0 = new Calculator4(p, 1, 0 * Math.PI);
-//            double t0 = 35;
-//            while (calculator0.t < t0)
-//                calculator0.iteration(false);
-//            while (calculator0.t < t0 + 3)
-//                calculator0.iteration(true);
-//            Draw2DGraphic.draw2D(calculator0.track, "track" + p);
-//        }
-//        System.exit(0);
+
+
+    public static void main(String[] args) {
+        ZipUtils.saveCodeInHistory();
+        ExcelWriter ew = new ExcelWriter();
+        ArrayList<Double> arrayList = new ArrayList<>();
+        double phase0 = 0 * Math.PI;
+        for (double alpha = 10; alpha <= 500; alpha += 10) {
+            System.out.println("alpha = " + alpha);
+            Calculator4 calculator0 = new Calculator4(alpha, 0.25 * alpha, phase0);
+            double t0 = 5;
+            while (calculator0.t < t0)
+                calculator0.iteration(false);
+            while (calculator0.t < t0 + 0.5)
+                calculator0.iteration(true);
+            arrayList.add(calculator0.sGamma);
+        }
+        ew.addColumn("phase = " + phase0, arrayList);
+        ew.write("4PSI");
+        System.exit(0);
 
 //        ArrayList<Double> arrayList = new ArrayList<>();
 //        ArrayList<Double> arrayList2 = new ArrayList<>();
