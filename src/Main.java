@@ -6,22 +6,18 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        ExcelWriter ew = new ExcelWriter();
-        double phase0 = 0 * Math.PI;
-        ArrayList<Double> arrayList0 = new ArrayList<>();
-        for (double alpha0 = 10; alpha0 <= 500; alpha0 += 10) {
-            Calculator4 calculator0 = new Calculator4(alpha0, 0.25 * alpha0, phase0);
-            double t0 = 5;
-            while (calculator0.t < t0)
-                calculator0.iteration(false);
-            while (calculator0.t < t0 + 3)
-                calculator0.iteration(true);
-            arrayList0.add(calculator0.sGamma);
-            System.out.println(alpha0);
-        }
-        ew.addColumn("phase = " + phase0, arrayList0);
-        ew.write("4PSI");
-        System.exit(0);
+
+//        double p = 0.001;
+//        for (double psi = 1; psi <= 1; psi += 10) {
+//            Calculator4 calculator0 = new Calculator4(p, 1, 0 * Math.PI);
+//            double t0 = 35;
+//            while (calculator0.t < t0)
+//                calculator0.iteration(false);
+//            while (calculator0.t < t0 + 3)
+//                calculator0.iteration(true);
+//            Draw2DGraphic.draw2D(calculator0.track, "track" + p);
+//        }
+//        System.exit(0);
 
 //        ArrayList<Double> arrayList = new ArrayList<>();
 //        ArrayList<Double> arrayList2 = new ArrayList<>();
