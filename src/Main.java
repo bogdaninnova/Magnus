@@ -11,26 +11,55 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
+
+//
+//        double alpha4 = 100;
+//        double psi4 = alpha4 * 0.25;
+//
+//
+//        for (double phase4 = 0; phase4 <= 2.001; phase4 += 0.5) {
+//            System.out.println(phase4);
+//            Calculator4 c4 = new Calculator4(alpha4, psi4, phase4 * Math.PI);
+//            double t4 = 5;
+//            while (c4.t < t4)
+//                c4.iteration(false);
+//            while (c4.t < t4 + 1)
+//                c4.iteration(true);
+//            Draw2DGraphic.draw2D(c4.track, "track alpha=" + alpha4 + " phase=" + phase4 + " s=" + c4.sGamma);
+//
+//        }
+//
+//        System.exit(0);
+
+
+
+
+
+
+
+
+
         ExcelWriter ew = new ExcelWriter();
-        for (double phase = 0; phase <= 2; phase = round(phase + 0.1, 1)) {
+        for (double phase = 0; phase <= 2; phase = round(phase + 0.25, 1)) {
             ArrayList<Double> arrayList = new ArrayList<>();
-            for (double alpha = 0; alpha <= 9.9; alpha = round(alpha + 0.1, 1)) {
-                System.out.println("phase = " + phase);
-                System.out.println("alpha = " + alpha);
-                System.out.println("Date = " + new Date() + "\n");
-                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase);
-                double t0 = 5;
-                while (calculator0.t < t0)
-                    calculator0.iteration(false);
-                while (calculator0.t < t0 + 1)
-                    calculator0.iteration(true);
-                arrayList.add(calculator0.sGamma);
-            }
+//            for (double alpha = 0; alpha <= 9.9; alpha = round(alpha + 0.1, 1)) {
+//                System.out.println("phase = " + phase);
+//                System.out.println("alpha = " + alpha);
+//                System.out.println("Date = " + new Date() + "\n");
+//                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase * Math.PI);
+//                double t0 = 5;
+//                while (calculator0.t < t0)
+//                    calculator0.iteration(false);
+//                while (calculator0.t < t0 + 1)
+//                    calculator0.iteration(true);
+//                arrayList.add(calculator0.sGamma);
+//            }
+            arrayList.add(0.0);
             for (double alpha = 10; alpha <= 99; alpha++) {
                 System.out.println("phase = " + phase);
                 System.out.println("alpha = " + alpha);
                 System.out.println("Date = " + new Date() + "\n");
-                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase);
+                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase * Math.PI);
                 double t0 = 5;
                 while (calculator0.t < t0)
                     calculator0.iteration(false);
@@ -42,7 +71,7 @@ public class Main {
                 System.out.println("phase = " + phase);
                 System.out.println("alpha = " + alpha);
                 System.out.println("Date = " + new Date() + "\n");
-                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase);
+                CalculatorLimited calculator0 = new CalculatorLimited(alpha, 0.25 * alpha, phase * Math.PI);
                 double t0 = 5;
                 while (calculator0.t < t0)
                     calculator0.iteration(false);
@@ -50,10 +79,10 @@ public class Main {
                     calculator0.iteration(true);
                 arrayList.add(calculator0.sGamma);
             }
-            ew.addColumn("0 10 100 200", arrayList);
+            ew.addColumn("10 100 200", arrayList);
             TextWriter.writeDoubleList(arrayList, "s(alpha) " + phase);
         }
-        ew.write("4PSI");
+        ew.write("4PSI(phase+=0.25pi)");
         System.exit(0);
 
 //        ArrayList<Double> arrayList = new ArrayList<>();

@@ -34,7 +34,6 @@ public class ZipUtils {
             zos = new ZipOutputStream(fos);
 
             for (String file : this.fileList) {
-                System.out.println("File Added : " + file);
                 ZipEntry ze = new ZipEntry(source + File.separator + file);
                 zos.putNextEntry(ze);
                 try (FileInputStream in = new FileInputStream(SOURCE_FOLDER + File.separator + file)) {
