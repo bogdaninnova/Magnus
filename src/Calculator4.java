@@ -119,4 +119,8 @@ public class Calculator4 {
     }
 
 
+
+
+    //-2 / Math.PI * Math.cos(phase) + 4 * integral(Math.sin(2*Math.PI * t - phase)/(1 + Math.pow(q(t), 2)))
+
 }
