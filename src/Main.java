@@ -12,6 +12,65 @@ public class Main {
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
 
+        double psi = 0.25 ;
+        double phase = 0.5;
+        ArrayList<Double> alCST_num = new ArrayList<>();
+
+        for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
+            Calculator5 calculatorNUM =
+                    new Calculator5(nu, psi * Math.PI, phase * Math.PI);
+            System.out.println("NU = " + nu + "\n");
+            double t0 = 5;
+            while (calculatorNUM.t < t0)
+                calculatorNUM.iteration(false);
+            while (calculatorNUM.t < t0 + 0.5)
+                calculatorNUM.iteration(true);
+            alCST_num.add(calculatorNUM.sGamma);
+        }
+        TextWriter.writeDoubleList(alCST_num, "psi=" + psi + "_phase=" + phase);
+    }
+
+    private void old () {
+
+        ExcelWriter ewCS = new ExcelWriter();
+        for (double phaseCS = 1.5; phaseCS <= 1.5; phaseCS = round(phaseCS + 0.1, 1)) {
+            ArrayList<Double> alCST = new ArrayList<>();
+            for (double alpha = 0; alpha <= 500; alpha += 1) {
+                CalculateSyTheor cst = new CalculateSyTheor(alpha, phaseCS * Math.PI);
+                while (cst.t < 0.5)
+                    cst.iteration();
+                alCST.add(cst.s_Gamma);
+            }
+            ewCS.addColumn("phase+=0.1pi", alCST);
+            System.out.println(phaseCS);
+            TextWriter.writeDoubleList(alCST, "phaseCST = " + phaseCS);
+        }
+        ewCS.write("phase+=0.1pi");
+
+
+        System.exit(0);
+        double phaseCST = 0.6;
+        ArrayList<Double> alCST_num = new ArrayList<>();
+        for (double alpha = 0; alpha <= 100; alpha += 1) {
+            System.out.println(alpha);
+            CalculatorLimited calculatorNUM =
+                    new CalculatorLimited(alpha, 0.25 * alpha, phaseCST * Math.PI);
+            double t0 = 5;
+            while (calculatorNUM.t < t0)
+                calculatorNUM.iteration(false);
+            while (calculatorNUM.t < t0 + 0.5)
+                calculatorNUM.iteration(true);
+            alCST_num.add(calculatorNUM.sGamma);
+        }
+        TextWriter.writeDoubleList(alCST_num, "phaseNUM = " + phaseCST);
+
+
+
+
+
+
+
+        System.exit(0);
         ExcelWriter ew = new ExcelWriter();
         for (double phase = 0.75; phase <= 1.25; phase = round(phase + 0.25, 2)) {
 
@@ -19,7 +78,7 @@ public class Main {
             for (double alpha = 1; alpha <= 100.001; alpha++) {
 
                 ArrayList<Double> arrayList = new ArrayList<>();
-                 for (double psi = 0; psi <= 100.001; psi++) {
+                for (double psi = 0; psi <= 100.001; psi++) {
                     System.out.println("phase = " + phase);
                     System.out.println("psi = " + psi);
                     System.out.println("alpha = " + alpha);
@@ -39,9 +98,7 @@ public class Main {
 
         }
         ew.write("FIG2 date"+ new Date().getTime());
-
     }
-
 
     private static ArrayList<Double> minus(ArrayList<Double> list2, ArrayList<Double> list1) {
         ArrayList<Double> list = new ArrayList<>();
