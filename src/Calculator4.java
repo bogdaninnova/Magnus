@@ -60,15 +60,15 @@ public class Calculator4 {
                 if (currentTime < 0.5) {
                     double q = getQ(currentTime);
                     sTheorGamma += 2 * (1 - q * q) / (1 + q * q)
-                            * Math.sin(2 * Math.PI * currentTime - PHASE);
+                            * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
                 } else {
                     double q = getQ(currentTime - 0.5);
                     sTheorGamma += 2 * (1 - q * q) / (1 + q * q)
-                            * Math.sin(2 * Math.PI * (currentTime - 0.5) - PHASE);
+                            * Math.sin(2 * Math.PI * (currentTime - 0.5) - PHASE) * dt;
                 }
                 sTheorList.add(sTheorGamma);
 
-                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime);
+                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime) * dt;
                 sList.add(sGamma);
 
                 ksiList.add(ksi);
@@ -117,10 +117,5 @@ public class Calculator4 {
     private double getdPsi2(double t) {
         return 2 * Math.PI * PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
     }
-
-
-
-
-    //-2 / Math.PI * Math.cos(phase) + 4 * integral(Math.sin(2*Math.PI * t - phase)/(1 + Math.pow(q(t), 2)))
 
 }

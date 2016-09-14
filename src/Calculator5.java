@@ -72,7 +72,7 @@ public class Calculator5 {
 
                 track.add(L);
 
-                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime) * nu*nu*nu;
+                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime) * nu*nu*nu * dt;
 
                 counter = 0;
             }
