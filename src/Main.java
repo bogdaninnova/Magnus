@@ -12,25 +12,57 @@ public class Main {
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
 
-        double psi = 1.5 ;
+        double psi = 0.25;
+        double phase = 0.6;
+        ArrayList<Double> alCST_num = new ArrayList<>();
+        for (int alpha0 = 10; alpha0 <= 10000; alpha0 += 10) {
 
-        for (double phase = 0; phase <= 1; phase = round(phase + 0.1, 1)) {
-            ArrayList<Double> alCST_num = new ArrayList<>();
-
-            for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
+            for (double nu = 0.1; nu <= 1; nu = round(nu + 0.01, 2)) {
                 Calculator5 calculatorNUM =
-                        new Calculator5(nu, psi * Math.PI, phase * Math.PI);
+                        new Calculator5(nu, psi * Math.PI, phase * Math.PI, alpha0);
+                System.out.println("alpha0 = " + alpha0);
                 System.out.println("NU = " + nu + "\n");
                 double t0 = 5;
                 while (calculatorNUM.t < t0)
                     calculatorNUM.iteration(false);
                 while (calculatorNUM.t < t0 + 0.5)
                     calculatorNUM.iteration(true);
-                alCST_num.add(calculatorNUM.sGamma);
+                if (calculatorNUM.sGamma > 0) {
+                    alCST_num.add(nu);
+                    break;
+                }
             }
-            TextWriter.writeDoubleList(alCST_num, "psi=" + psi + "_phase=" + phase + "alpha=10000");
         }
+        TextWriter.writeDoubleList(alCST_num, "NU_psi=" + psi + "_phase=" + phase + "alpha+=10");
     }
+
+
+
+//    {
+//        double psi = 1.5;
+//
+//
+//        for (double phase = 0; phase <= 1; phase = round(phase + 0.1, 1)) {
+//            ArrayList<Double> alCST_num = new ArrayList<>();
+//
+//            for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
+//                Calculator5 calculatorNUM =
+//                        new Calculator5(nu, psi * Math.PI, phase * Math.PI);
+//                System.out.println("NU = " + nu + "\n");
+//                double t0 = 5;
+//                while (calculatorNUM.t < t0)
+//                    calculatorNUM.iteration(false);
+//                while (calculatorNUM.t < t0 + 0.5)
+//                    calculatorNUM.iteration(true);
+//                alCST_num.add(calculatorNUM.sGamma);
+//            }
+//            TextWriter.writeDoubleList(alCST_num, "psi=" + psi + "_phase=" + phase + "alpha=10000");
+//        }
+//    }
+
+
+
+
 
     private void old () {
 

@@ -21,21 +21,21 @@ public class Calculator5 {
 
     private double nu;
 
-    public Calculator5(double nu, double psi, double phase) {
+    public Calculator5(double nu, double psi, double phase, double alpha0) {
         this.PSI_MAX = psi;
         this.PHASE = phase;
         this.nu = nu;
-        setAlpha(nu);
+        setAlpha(nu, alpha0);
     }
 
-    public void setAlpha(double nu) {
-        this.ALPHA = nu*nu*nu * getAlpha0();
+    public void setAlpha(double nu, double alpha0) {
+        this.ALPHA = nu*nu*nu * alpha0;
     }
 
-    private static double getAlpha0() {
-        //return Math.PI * M * H / (3 * ETA * OMEGA);
-        return 10000;
-    }
+//    private static double getAlpha0() {
+//        //return Math.PI * M * H / (3 * ETA * OMEGA);
+//        return 10000;
+//    }
 
 //    private static double getGamma0() {
 //        return RHO * M * H * B*B / (36 * ETA*ETA);
