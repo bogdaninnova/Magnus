@@ -11,6 +11,8 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
+        calc(2);
+        System.exit(0);
 
         double psi = 0.25;
         double phase = 0.6;
@@ -142,24 +144,22 @@ public class Main {
     }
 
 
-    private static void calc() {
+    private static void calc(double phase) {
         ExcelWriter ew = new ExcelWriter();
 
-        double phase = 0;
-        String name = "10 - 1000";
-        for (double alpha = 10; alpha <= 1000; alpha += 10) {
+        for (int alpha = 100; alpha <= 1000; alpha += 100) {
             ArrayList<Double> listS = new ArrayList<>();
-            for (double psi = 10; psi <= 1000; psi += 10) {
+            for (int psi = 0; psi <= 1000; psi += 10) {
                 System.out.println("alpha = " + alpha + "; psi = " + psi + "; " + new Date());
                 Calculator4 c = new Calculator4(alpha, psi, phase);
-                double time = 5;
+                double time = 10;
                 while (c.t < time)
                     c.iteration(false);
                 while (c.t < time+0.5)
                     c.iteration(true);
                 listS.add(c.sGamma);
             }
-            ew.addColumn(name, listS);
+            ew.addColumn("phase=" + phase, listS);
         }
 
         ew.write("phase = " + phase);
