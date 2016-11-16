@@ -102,6 +102,7 @@ public class Calculator4 {
         return dt/6 * (d1 + 2 * d2 + 2 * d3 + d4);
     }
 
+
     private double function(double ksi, double t) {
         return getdPsi(t) - ALPHA * Math.sin(ksi);
     }
@@ -111,7 +112,8 @@ public class Calculator4 {
     }
 
     private double getPsi(double t) {
-        return PSI_MAX * 2 / Math.PI * Math.asin(Math.cos(2 * Math.PI * t + PHASE));
+        //return PSI_MAX * 2 / Math.PI * Math.asin(Math.cos(2 * Math.PI * t + PHASE));
+        return PSI_MAX * Math.cos(2 * Math.PI * t);
     }
 
     private double getdPsi2(double t) {

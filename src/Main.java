@@ -11,31 +11,34 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
-        calc(2);
-        System.exit(0);
 
-        double psi = 0.25;
-        double phase = 0.6;
+        double psi = 0.8;
+       // double phase = 0;
+        double alpha0 = 30;
         ArrayList<Double> alCST_num = new ArrayList<>();
-        for (int alpha0 = 10; alpha0 <= 10000; alpha0 += 10) {
+        for (double phase = 5.75; phase <= 5.75; phase = round(phase + 0.1, 1)) {
 
-            for (double nu = 0.1; nu <= 1; nu = round(nu + 0.01, 2)) {
+            for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
                 Calculator5 calculatorNUM =
                         new Calculator5(nu, psi * Math.PI, phase * Math.PI, alpha0);
-                System.out.println("alpha0 = " + alpha0);
-                System.out.println("NU = " + nu + "\n");
+                //System.out.println("alpha0 = " + alpha0);
+                //System.out.println("phase = " + phase);
+                System.out.println("NU = " + nu);
                 double t0 = 5;
                 while (calculatorNUM.t < t0)
                     calculatorNUM.iteration(false);
                 while (calculatorNUM.t < t0 + 0.5)
                     calculatorNUM.iteration(true);
-                if (calculatorNUM.sGamma > 0) {
-                    alCST_num.add(nu);
-                    break;
-                }
+
+                alCST_num.add(calculatorNUM.sGamma);
+                //if (calculatorNUM.sGamma > 0) {
+                //    alCST_num.add(nu);
+                //break;
+                //}
             }
+
+            TextWriter.writeDoubleList(alCST_num, "NU_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
         }
-        TextWriter.writeDoubleList(alCST_num, "NU_psi=" + psi + "_phase=" + phase + "alpha+=10");
     }
 
 
