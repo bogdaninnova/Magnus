@@ -13,32 +13,32 @@ public class Main {
         ZipUtils.saveCodeInHistory();
 
         double psi = 0.8;
-       // double phase = 0;
-        double alpha0 = 30;
-        ArrayList<Double> alCST_num = new ArrayList<>();
-        for (double phase = 5.75; phase <= 5.75; phase = round(phase + 0.1, 1)) {
 
-            for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
-                Calculator5 calculatorNUM =
-                        new Calculator5(nu, psi * Math.PI, phase * Math.PI, alpha0);
-                //System.out.println("alpha0 = " + alpha0);
-                //System.out.println("phase = " + phase);
-                System.out.println("NU = " + nu);
+
+        ExcelWriter ew = new ExcelWriter();
+
+
+        for (double phase = 0; phase < 2.001; phase += 0.1) {
+            ArrayList<Double> sList = new ArrayList<>();
+            for (double alpha0 = 10; alpha0 <= 500; alpha0 += 10) {
+                Calculator5 calculatorNUM = new Calculator5(alpha0, psi * Math.PI, phase * Math.PI);
                 double t0 = 5;
                 while (calculatorNUM.t < t0)
                     calculatorNUM.iteration(false);
                 while (calculatorNUM.t < t0 + 0.5)
                     calculatorNUM.iteration(true);
 
-                alCST_num.add(calculatorNUM.sGamma);
-                //if (calculatorNUM.sGamma > 0) {
-                //    alCST_num.add(nu);
-                //break;
-                //}
-            }
+                System.out.println(phase);
+                System.out.println(alpha0);
+                System.out.println();
+                sList.add(calculatorNUM.sGamma);
 
-            TextWriter.writeDoubleList(alCST_num, "NU_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
+//                TextWriter.writeDoubleList(calculatorNUM.ksiList, "ksiList_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
+//                TextWriter.writeTraectorysCoordinates(calculatorNUM.track, "track_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
+            }
+            ew.addColumn("s_alpha", sList);
         }
+        ew.write("s_alpha");
     }
 
 
