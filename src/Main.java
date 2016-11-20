@@ -12,35 +12,61 @@ public class Main {
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
 
-        double psi = 0.8;
 
+            ExcelWriter ew = new ExcelWriter();
 
-        ExcelWriter ew = new ExcelWriter();
-
-
-        for (double phase = 0; phase < 2.001; phase += 0.1) {
-            ArrayList<Double> sList = new ArrayList<>();
-            for (double alpha0 = 10; alpha0 <= 500; alpha0 += 10) {
-                Calculator5 calculatorNUM = new Calculator5(alpha0, psi * Math.PI, phase * Math.PI);
-                double t0 = 5;
+        for (double alpha0 = 50; alpha0 <= 500; alpha0 = round(alpha0 + 50, 0)){
+                ArrayList<Double> arrayList = new ArrayList<>();
+            for (double phase = 0; phase < 2.001; phase = round(phase + 0.05, 2)) {
+                Calculator5 calculatorNUM = new Calculator5(alpha0, 0.25 * Math.PI, phase * Math.PI);
+                double t0 = 0;
                 while (calculatorNUM.t < t0)
                     calculatorNUM.iteration(false);
-                while (calculatorNUM.t < t0 + 0.5)
+                while (calculatorNUM.t < t0 + 2)
                     calculatorNUM.iteration(true);
 
-                System.out.println(phase);
-                System.out.println(alpha0);
-                System.out.println();
-                sList.add(calculatorNUM.sGamma);
+                    arrayList.add(calculatorNUM.sGamma);
 
+
+//                    ew.addColumn("other", calculatorNUM.ksiList);
+//                    ew.addVectorList("other", calculatorNUM.track);
 //                TextWriter.writeDoubleList(calculatorNUM.ksiList, "ksiList_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
 //                TextWriter.writeTraectorysCoordinates(calculatorNUM.track, "track_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
             }
-            ew.addColumn("s_alpha", sList);
-        }
-        ew.write("s_alpha");
+                 ew.addColumn("s_phase", arrayList);
+                System.out.println(new Date());
+                System.out.println(alpha0);
+                System.out.println();
+            }
+            ew.write("s_phase");
+
+
     }
 
+
+    public static void tr_ksi() {
+        for (double psi = 0.1; psi <= 1; psi = round(psi + 0.1, 1)) {
+            ExcelWriter ew = new ExcelWriter();
+            ExcelWriter ew_tr = new ExcelWriter();
+            for (double alpha0 = 50; alpha0 <= 500; alpha0 = round(alpha0 + 50, 0)) {
+                for (double phase = 0.1; phase <= 2; phase = round(phase + 0.1, 1)) {
+                    Calculator5 calc = new Calculator5(alpha0, psi * Math.PI, phase * Math.PI);
+                    double t0 = 5;
+                    while (calc.t < t0)
+                        calc.iteration(false);
+                    while (calc.t < t0 + 3)
+                        calc.iteration(true);
+                    ew.addColumn("ksi_alpha=" + alpha0, calc.ksiList);
+                    ew_tr.addVectorList("tr_alpha="+alpha0, calc.track, "X", "Y");
+                }
+                System.out.println("psi="+psi);
+                System.out.println("alpha0="+alpha0);
+                System.out.println();
+            }
+            ew.write("ksi_psi=" + psi);
+            ew_tr.write("tr_psi=" + psi);
+        }
+    }
 
 
 //    {
