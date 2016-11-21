@@ -79,7 +79,7 @@ public class Calculator5 {
     }
 
     private double getPsi(double t) {
-        return PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
+        return PSI_MAX * Math.cos(2 * Math.PI * t);
     }
 
 }

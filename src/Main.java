@@ -11,12 +11,34 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
+        getS_alpha();
+        System.exit(0);
+        double alpha0 = 100;
+        ExcelWriter ew = new ExcelWriter();
+        for (double phase = 4.0/3.0; phase <= 2; phase = round(phase + 2.25, 2)){
+            Calculator5 calculatorNUM = new Calculator5(alpha0, 0.25 * Math.PI, phase * Math.PI);
+            double t0 = 0;
+            while (calculatorNUM.t < t0)
+                calculatorNUM.iteration(false);
+            while (calculatorNUM.t < t0 + 2)
+                calculatorNUM.iteration(true);
+            ew.addVectorList("phase=" + phase, calculatorNUM.track, "X", "Y");
+            System.out.println(phase);
+            //ew.addVectorList("Main", calculatorNUM.track);
+        }
 
 
-            ExcelWriter ew = new ExcelWriter();
+
+        ew.write("Main5");
+    }
+
+
+
+    private static void getS() {
+        ExcelWriter ew = new ExcelWriter();
 
         for (double alpha0 = 50; alpha0 <= 500; alpha0 = round(alpha0 + 50, 0)){
-                ArrayList<Double> arrayList = new ArrayList<>();
+            ArrayList<Double> arrayList = new ArrayList<>();
             for (double phase = 0; phase < 2.001; phase = round(phase + 0.05, 2)) {
                 Calculator5 calculatorNUM = new Calculator5(alpha0, 0.25 * Math.PI, phase * Math.PI);
                 double t0 = 0;
@@ -25,7 +47,7 @@ public class Main {
                 while (calculatorNUM.t < t0 + 2)
                     calculatorNUM.iteration(true);
 
-                    arrayList.add(calculatorNUM.sGamma);
+                arrayList.add(calculatorNUM.sGamma);
 
 
 //                    ew.addColumn("other", calculatorNUM.ksiList);
@@ -33,166 +55,48 @@ public class Main {
 //                TextWriter.writeDoubleList(calculatorNUM.ksiList, "ksiList_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
 //                TextWriter.writeTraectorysCoordinates(calculatorNUM.track, "track_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
             }
-                 ew.addColumn("s_phase", arrayList);
-                System.out.println(new Date());
-                System.out.println(alpha0);
-                System.out.println();
-            }
-            ew.write("s_phase");
-
-
+            ew.addColumn("s_phase", arrayList);
+            System.out.println(new Date());
+            System.out.println(alpha0);
+            System.out.println();
+        }
+        ew.write("s_phase");
     }
 
 
-    public static void tr_ksi() {
-        for (double psi = 0.1; psi <= 1; psi = round(psi + 0.1, 1)) {
-            ExcelWriter ew = new ExcelWriter();
-            ExcelWriter ew_tr = new ExcelWriter();
-            for (double alpha0 = 50; alpha0 <= 500; alpha0 = round(alpha0 + 50, 0)) {
-                for (double phase = 0.1; phase <= 2; phase = round(phase + 0.1, 1)) {
-                    Calculator5 calc = new Calculator5(alpha0, psi * Math.PI, phase * Math.PI);
-                    double t0 = 5;
-                    while (calc.t < t0)
-                        calc.iteration(false);
-                    while (calc.t < t0 + 3)
-                        calc.iteration(true);
-                    ew.addColumn("ksi_alpha=" + alpha0, calc.ksiList);
-                    ew_tr.addVectorList("tr_alpha="+alpha0, calc.track, "X", "Y");
-                }
-                System.out.println("psi="+psi);
-                System.out.println("alpha0="+alpha0);
-                System.out.println();
-            }
-            ew.write("ksi_psi=" + psi);
-            ew_tr.write("tr_psi=" + psi);
-        }
-    }
 
 
-//    {
-//        double psi = 1.5;
-//
-//
-//        for (double phase = 0; phase <= 1; phase = round(phase + 0.1, 1)) {
-//            ArrayList<Double> alCST_num = new ArrayList<>();
-//
-//            for (double nu = 0; nu <= 1; nu = round(nu + 0.01, 2)) {
-//                Calculator5 calculatorNUM =
-//                        new Calculator5(nu, psi * Math.PI, phase * Math.PI);
-//                System.out.println("NU = " + nu + "\n");
-//                double t0 = 5;
-//                while (calculatorNUM.t < t0)
-//                    calculatorNUM.iteration(false);
-//                while (calculatorNUM.t < t0 + 0.5)
-//                    calculatorNUM.iteration(true);
-//                alCST_num.add(calculatorNUM.sGamma);
-//            }
-//            TextWriter.writeDoubleList(alCST_num, "psi=" + psi + "_phase=" + phase + "alpha=10000");
-//        }
-//    }
-
-
-
-
-
-    private void old () {
-
-        ExcelWriter ewCS = new ExcelWriter();
-        for (double phaseCS = 1.5; phaseCS <= 1.5; phaseCS = round(phaseCS + 0.1, 1)) {
-            ArrayList<Double> alCST = new ArrayList<>();
-            for (double alpha = 0; alpha <= 500; alpha += 1) {
-                CalculateSyTheor cst = new CalculateSyTheor(alpha, phaseCS * Math.PI);
-                while (cst.t < 0.5)
-                    cst.iteration();
-                alCST.add(cst.s_Gamma);
-            }
-            ewCS.addColumn("phase+=0.1pi", alCST);
-            System.out.println(phaseCS);
-            TextWriter.writeDoubleList(alCST, "phaseCST = " + phaseCS);
-        }
-        ewCS.write("phase+=0.1pi");
-
-
-        System.exit(0);
-        double phaseCST = 0.6;
-        ArrayList<Double> alCST_num = new ArrayList<>();
-        for (double alpha = 0; alpha <= 100; alpha += 1) {
-            System.out.println(alpha);
-            CalculatorLimited calculatorNUM =
-                    new CalculatorLimited(alpha, 0.25 * alpha, phaseCST * Math.PI);
-            double t0 = 5;
-            while (calculatorNUM.t < t0)
-                calculatorNUM.iteration(false);
-            while (calculatorNUM.t < t0 + 0.5)
-                calculatorNUM.iteration(true);
-            alCST_num.add(calculatorNUM.sGamma);
-        }
-        TextWriter.writeDoubleList(alCST_num, "phaseNUM = " + phaseCST);
-
-
-
-
-
-
-
-        System.exit(0);
+    private static void getS_alpha() {
         ExcelWriter ew = new ExcelWriter();
-        for (double phase = 0.75; phase <= 1.25; phase = round(phase + 0.25, 2)) {
+        for (double phase = 0; phase < 2.001; phase = round(phase + 0.1, 1))
+        {
+            ArrayList<Double> arrayList = new ArrayList<>();
+            for (double alpha0 = 1; alpha0 <= 100; alpha0 = round(alpha0 + 1, 0)) {
+                Calculator5 calculatorNUM = new Calculator5(alpha0, 0.25 * Math.PI, phase * Math.PI);
+                double t0 = 0;
+                while (calculatorNUM.t < t0)
+                    calculatorNUM.iteration(false);
+                while (calculatorNUM.t < t0 + 2)
+                    calculatorNUM.iteration(true);
 
+                arrayList.add(calculatorNUM.sGamma);
 
-            for (double alpha = 1; alpha <= 100.001; alpha++) {
-
-                ArrayList<Double> arrayList = new ArrayList<>();
-                for (double psi = 0; psi <= 100.001; psi++) {
-                    System.out.println("phase = " + phase);
-                    System.out.println("psi = " + psi);
-                    System.out.println("alpha = " + alpha);
-                    System.out.println("Date = " + new Date() + "\n");
-                    CalculatorLimited calculator0 =
-                            new CalculatorLimited(alpha, psi, phase * Math.PI);
-                    double t0 = 5;
-                    while (calculator0.t < t0)
-                        calculator0.iteration(false);
-                    while (calculator0.t < t0 + 0.5)
-                        calculator0.iteration(true);
-                    arrayList.add(calculator0.sGamma);
-                }
-                ew.addColumn("phase = " + phase, arrayList);
             }
-
-
+            ew.addColumn("s_alpha", arrayList);
+            System.out.println(new Date());
+            System.out.println(phase);
+            System.out.println();
         }
-        ew.write("FIG2 date"+ new Date().getTime());
+        ew.write("s_alpha");
     }
+
+
 
     private static ArrayList<Double> minus(ArrayList<Double> list2, ArrayList<Double> list1) {
         ArrayList<Double> list = new ArrayList<>();
         for (int i = 0; i < list2.size(); i++)
             list.add(list2.get(i) - list1.get(i));
         return list;
-    }
-
-
-    private static void calc(double phase) {
-        ExcelWriter ew = new ExcelWriter();
-
-        for (int alpha = 100; alpha <= 1000; alpha += 100) {
-            ArrayList<Double> listS = new ArrayList<>();
-            for (int psi = 0; psi <= 1000; psi += 10) {
-                System.out.println("alpha = " + alpha + "; psi = " + psi + "; " + new Date());
-                Calculator4 c = new Calculator4(alpha, psi, phase);
-                double time = 10;
-                while (c.t < time)
-                    c.iteration(false);
-                while (c.t < time+0.5)
-                    c.iteration(true);
-                listS.add(c.sGamma);
-            }
-            ew.addColumn("phase=" + phase, listS);
-        }
-
-        ew.write("phase = " + phase);
-
     }
 
     public static double round(double value, int places) {
