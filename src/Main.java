@@ -11,26 +11,29 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
-        getS_alpha();
-        System.exit(0);
 
-        double alpha0 = 50;
-        ExcelWriter ew = new ExcelWriter();
-        for (double phase = 4.0/3.0; phase <= 2; phase = round(phase + 2.25, 2)){
-            Calculator5 calculatorNUM = new Calculator5(alpha0, 0.25 * Math.PI, phase * Math.PI);
-            double t0 = 0.5;
-            while (calculatorNUM.t < t0)
-                calculatorNUM.iteration(false);
-            while (calculatorNUM.t < t0 + 1.5)
-                calculatorNUM.iteration(true);
-            ew.addVectorList("phase=" + phase, calculatorNUM.track, "X", "Y");
-            System.out.println(phase);
-            //ew.addVectorList("Main", calculatorNUM.track);
+        double t_0 = 0;
+        double t_m = 5;
+
+
+        for (double alpha = 100; alpha <= 100; alpha = round(alpha + 25, 0)) {
+            ExcelWriter ew = new ExcelWriter();
+            for (double kappa = 0.1; kappa <= 1; kappa = round(kappa + 0.1, 1)) {
+            System.out.println("alpha = " + alpha + "; kappa = " + kappa);
+                for (double ksi = 0.1; ksi <= 2; ksi = round(ksi + 0.1, 1)) {
+                    Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
+                    calc.setKsi_0(ksi * Math.PI);
+                    while (calc.t < t_0)
+                        calc.iteration(false);
+                    while (calc.t < t_0 + t_m)
+                        calc.iteration(true);
+                    ew.addColumn("kappa="+kappa, calc.ksiList);
+                }
+            }
+            ew.write("alpha = " + alpha);
         }
 
 
-
-        ew.write("4_30pi");
     }
 
 
@@ -56,7 +59,7 @@ public class Main {
 //                TextWriter.writeDoubleList(calculatorNUM.ksiList, "ksiList_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
 //                TextWriter.writeTraectorysCoordinates(calculatorNUM.track, "track_psi=" + psi + "_phase=" + phase + "alpha=" + alpha0);
             }
-            ew.addColumn("s_phase", arrayList);
+            ew.addColumn("s_phase che", arrayList);
             System.out.println(new Date());
             System.out.println(alpha0);
             System.out.println();

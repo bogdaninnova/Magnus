@@ -20,6 +20,13 @@ public class Calculator5 {
     public double t = 0;
     public double sGamma = 0;
 
+
+    public void setKsi_0(double ksi_0) {
+        this.ksi = ksi_0;
+    }
+
+
+
     public ArrayList<Double> sList = new ArrayList<>();
 
     public ArrayList<Double> ksiList = new ArrayList<>();
@@ -46,14 +53,10 @@ public class Calculator5 {
 
             if (counter == init_counter) {
                 double currentTime = t - ((int) t);
-
                 track.add(L);
-
                 sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
                 sList.add(sGamma);
-
                 ksiList.add(ksi);
-
                 counter = 0;
             }
         }
