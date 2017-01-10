@@ -12,15 +12,15 @@ public class Main {
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
 
-        double t_0 = 0;
-        double t_m = 5;
+        double t_0 = 10;
+        double t_m = 1;
 
 
-        for (double alpha = 100; alpha <= 100; alpha = round(alpha + 25, 0)) {
+        for (double alpha = 25; alpha <= 50; alpha = round(alpha + 25, 0)) {
             ExcelWriter ew = new ExcelWriter();
-            for (double kappa = 0.1; kappa <= 1; kappa = round(kappa + 0.1, 1)) {
+            for (double kappa = 0.1; kappa <= 1.0; kappa = round(kappa + 0.1, 1)) {
             System.out.println("alpha = " + alpha + "; kappa = " + kappa);
-                for (double ksi = 0.1; ksi <= 2; ksi = round(ksi + 0.1, 1)) {
+                for (double ksi = -1; ksi <= 1; ksi = round(ksi + 0.1, 1)) {
                     Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
                     calc.setKsi_0(ksi * Math.PI);
                     while (calc.t < t_0)
@@ -30,7 +30,7 @@ public class Main {
                     ew.addColumn("kappa="+kappa, calc.ksiList);
                 }
             }
-            ew.write("alpha = " + alpha);
+            ew.write("st_pi_alpha = " + alpha);
         }
 
 

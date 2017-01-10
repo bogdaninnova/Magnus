@@ -74,12 +74,22 @@ public class Calculator5 {
 
 
     private double function(double ksi, double t) {
-        return getdPsi(t) - ALPHA * Math.sin(ksi);
+        return getdPsi2(t) - ALPHA * Math.sin(ksi);
     }
 
     private double getdPsi(double t) {
         return (getPsi(t + dt) - getPsi(t)) / dt;
     }
+
+    private double getdPsi2(double t) {
+        if (t-(int)t < 0.5)
+            return -4*PSI_MAX;
+        else
+            return 4*PSI_MAX;
+    }
+
+
+
 
     private double getPsi(double t) {
         return PSI_MAX * Math.cos(2 * Math.PI * t);
