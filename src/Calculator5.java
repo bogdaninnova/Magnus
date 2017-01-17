@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Calculator5 {
 
 
-    public double dt = Math.pow(10, -5);
+    public static final double dt = Math.pow(10, -5);
 
     public double PHASE;
     public double PSI_MAX;

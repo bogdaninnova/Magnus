@@ -12,15 +12,42 @@ public class Main {
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
 
-        double t_0 = 10;
-        double t_m = 1;
+        double t_0 = 5;
+        double t_m = Calculator5.dt;
+
+        double kappa = 5;
+        double ksi = 0;
+
+        for (double alpha = 0; alpha < 100; alpha++) {
+//            Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
+//            calc.setKsi_0(ksi * Math.PI);
+//            while (calc.t < t_0)
+//                calc.iteration(false);
+//            while (calc.t < t_0 + t_m)
+//                calc.iteration(true);
+//            System.out.println(calc.ksiList.get(0));
+            System.out.println(getKsiStationar(alpha, kappa));
+        }
 
 
-        for (double alpha = 25; alpha <= 50; alpha = round(alpha + 25, 0)) {
+    }
+
+
+
+
+    private static void countAll() {
+        double t_0 = 0;
+        double t_m = 3;
+
+        double[] kappaList = {1.1, 1.3, 1.5, 2.0, 5.0, 10, 25, 50, 100};
+        double[] alphaList = {1, 5, 10, 25, 50, 100};
+
+
+        for (double alpha : alphaList) {
             ExcelWriter ew = new ExcelWriter();
-            for (double kappa = 0.1; kappa <= 1.0; kappa = round(kappa + 0.1, 1)) {
-            System.out.println("alpha = " + alpha + "; kappa = " + kappa);
-                for (double ksi = -1; ksi <= 1; ksi = round(ksi + 0.1, 1)) {
+            for (double kappa : kappaList) {
+                System.out.println("alpha = " + alpha + "; kappa = " + kappa);
+                for (double ksi = 0; ksi <= 2; ksi = round(ksi + 0.1, 1)) {
                     Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
                     calc.setKsi_0(ksi * Math.PI);
                     while (calc.t < t_0)
@@ -30,10 +57,33 @@ public class Main {
                     ew.addColumn("kappa="+kappa, calc.ksiList);
                 }
             }
-            ew.write("st_pi_alpha = " + alpha);
+            ew.write("0_2pi_kappa_more_than_1_alpha = " + alpha);
         }
+    }
 
 
+
+    private static double getKsiStationar(double alpha, double kappa) {
+        double check = alpha/4/Math.PI*Math.sqrt(kappa*kappa-1);
+        int k = (int) Math.round(check);
+
+        if(check-(int)check > 0.5)
+            return getKsiStationar2(alpha, kappa, k) + Math.PI;
+        else
+            return getKsiStationar2(alpha, kappa, k);
+    }
+
+
+    private static double getKsiStationar1(double alpha, double kappa, int k) {
+        return //Math.PI * k -
+                Math.atan(kappa/Math.sqrt(kappa*kappa-1)*
+                Math.tan(Math.PI*k-alpha/4*Math.sqrt(kappa*kappa-1)));
+    }
+
+    private static double getKsiStationar2(double alpha, double kappa, int k) {
+        return //Math.PI * k +
+                Math.atan(kappa/Math.sqrt(kappa*kappa-1)*
+                Math.tan(-Math.PI*k+alpha/4*Math.sqrt(kappa*kappa-1)));
     }
 
 
