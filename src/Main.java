@@ -1,6 +1,8 @@
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,10 +17,13 @@ public class Main {
         double t_0 = 5;
         double t_m = Calculator5.dt;
 
-        double kappa = 5;
+
+
+
+        double alpha = 10;
         double ksi = 0;
 
-        for (double alpha = 0; alpha < 100; alpha++) {
+        for (double kappa = 1.1; kappa < 25; kappa+=0.1) {
 //            Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
 //            calc.setKsi_0(ksi * Math.PI);
 //            while (calc.t < t_0)
@@ -26,7 +31,7 @@ public class Main {
 //            while (calc.t < t_0 + t_m)
 //                calc.iteration(true);
 //            System.out.println(calc.ksiList.get(0));
-            System.out.println(getKsiStationar(alpha, kappa));
+System.out.println(getKsiStationar(alpha, kappa));
         }
 
 
@@ -68,20 +73,20 @@ public class Main {
         int k = (int) Math.round(check);
 
         if(check-(int)check > 0.5)
-            return getKsiStationar2(alpha, kappa, k) + Math.PI;
+            return getKsiStationar1(alpha, kappa, k);
         else
             return getKsiStationar2(alpha, kappa, k);
     }
 
 
     private static double getKsiStationar1(double alpha, double kappa, int k) {
-        return //Math.PI * k -
+        return Math.PI * k -
                 Math.atan(kappa/Math.sqrt(kappa*kappa-1)*
                 Math.tan(Math.PI*k-alpha/4*Math.sqrt(kappa*kappa-1)));
     }
 
     private static double getKsiStationar2(double alpha, double kappa, int k) {
-        return //Math.PI * k +
+        return Math.PI * k +
                 Math.atan(kappa/Math.sqrt(kappa*kappa-1)*
                 Math.tan(-Math.PI*k+alpha/4*Math.sqrt(kappa*kappa-1)));
     }
