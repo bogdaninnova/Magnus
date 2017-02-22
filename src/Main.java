@@ -1,8 +1,5 @@
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,6 +10,18 @@ public class Main {
 
     public static void main(String[] args) {
         ZipUtils.saveCodeInHistory();
+
+
+        System.out.println(new CalculateSyTheor2(2, 0.1, 0 * Math.PI).getS_gamma());
+
+        countAllSlist();
+
+
+        System.exit(0);
+
+
+
+
 
         double t_0 = 5;
         double t_m = Calculator5.dt;
@@ -41,29 +50,82 @@ System.out.println(getKsiStationar(alpha, kappa));
 
 
     private static void countAll() {
-        double t_0 = 0;
-        double t_m = 3;
-
-        double[] kappaList = {1.1, 1.3, 1.5, 2.0, 5.0, 10, 25, 50, 100};
-        double[] alphaList = {1, 5, 10, 25, 50, 100};
+        double t_0 = 100;
+        double t_m = 1;
 
 
-        for (double alpha : alphaList) {
-            ExcelWriter ew = new ExcelWriter();
-            for (double kappa : kappaList) {
+        //double[] kappaList = {1.1, 1.3, 1.5, 2.0, 5.0, 10, 25, 50, 100};
+        //double[] alphaList = {1, 5, 10, 25, 50, 100};
+
+        ExcelWriter ew = new ExcelWriter();
+        for (double alpha = 5; alpha <= 50; alpha = round(alpha + 5, 0)) {
+            for (double kappa = 0.1; kappa <= 1; kappa = round(kappa + 0.1, 1)) {
                 System.out.println("alpha = " + alpha + "; kappa = " + kappa);
-                for (double ksi = 0; ksi <= 2; ksi = round(ksi + 0.1, 1)) {
                     Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
-                    calc.setKsi_0(ksi * Math.PI);
                     while (calc.t < t_0)
                         calc.iteration(false);
                     while (calc.t < t_0 + t_m)
                         calc.iteration(true);
-                    ew.addColumn("kappa="+kappa, calc.ksiList);
-                }
+                ew.addColumn("alpha="+alpha, calc.ksiList);
             }
-            ew.write("0_2pi_kappa_more_than_1_alpha = " + alpha);
         }
+        ew.write("ksi_dzeta");
+    }
+
+
+
+    private static void countAllSlist() {
+        double t_0 = 100;
+        double t_m = 0.5;
+
+
+        double[] kappaList = {0.5};
+        double[] alphaList = {2};
+
+        ExcelWriter ew = new ExcelWriter();
+        for (double alpha : alphaList) {
+            for (double kappa : kappaList) {
+                System.out.println("alpha = " + alpha + "; kappa = " + kappa);
+                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
+                while (calc.t < t_0)
+                    calc.iteration(false);
+                while (calc.t < t_0 + t_m) {
+                    calc.iteration(true);
+                }
+                System.out.println(calc.sGamma);
+            }
+        }
+        ew.write("ksi_dzeta");
+    }
+
+
+
+    private static void ksi_0_alpha() {
+        double t_0 = 100;
+        double t_m = 1;
+
+
+        //double[] kappaList = {1.1, 1.3, 1.5, 2.0, 5.0, 10, 25, 50, 100};
+        //double[] alphaList = {1, 5, 10, 25, 50, 100};
+
+        ExcelWriter ew = new ExcelWriter();
+        for (double kappa = 0.1; kappa <= 1; kappa = round(kappa + 0.1, 1)) {
+            ArrayList<Double> arrayList = new ArrayList<>();
+            for (double alpha = 1; alpha <= 100; alpha = round(alpha + 1, 0)) {
+                System.out.println("alpha = " + alpha + "; kappa = " + kappa);
+                //for (double ksi = -3; ksi <= 3; ksi = round(ksi + 0.1, 1)) {
+                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
+                //   calc.setKsi_0(ksi * Math.PI);
+                while (calc.t < t_0)
+                    calc.iteration(false);
+                while (calc.t < t_0 + t_m)
+                    calc.iteration(true);
+                arrayList.add(calc.ksiList.get(0));
+                //}
+            }
+            ew.addColumn("ksi(0)_alpha", arrayList);
+        }
+        ew.write("ksi(0)_alpha");
     }
 
 
@@ -165,6 +227,5 @@ System.out.println(getKsiStationar(alpha, kappa));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-
 
 }
