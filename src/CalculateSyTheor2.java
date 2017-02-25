@@ -4,10 +4,10 @@ public class CalculateSyTheor2 {
     private double PHASE;
     public double t;
     public double s_Gamma;
-    private static final double dt = Math.pow(10, -5);
-    private final double ALPHA;
-    private final double KAPPA;
-    private final double Q0;
+    private double dt = Calculator5.dt;
+    private double ALPHA;
+    private double KAPPA;
+    private double Q0;
 
     public CalculateSyTheor2(double alpha, double kappa, double phase) {
         this.ALPHA = alpha;
@@ -20,19 +20,34 @@ public class CalculateSyTheor2 {
 
     public double getS_gamma() {
         while (t <= 0.5) {
+            s_Gamma += iterateS_gamma(t);
             t += dt;
-            s_Gamma += iterateS_gamma();
         }
         return s_Gamma;
     }
 
+    public double getKsi(double t) {
+        return 2 * Math.atan((getQ_t(t) - 1) / KAPPA);
+    }
 
-    private double iterateS_gamma() {
-        double Q_t = getQ_t();
+
+    private double iterateS_gamma(double t) {
+        double Q_t = getQ_t(t);
         return 4 * KAPPA * (Q_t-1) / (KAPPA*KAPPA + Math.pow(Q_t-1, 2)) * Math.sin(2 * Math.PI * t - PHASE) * dt;
     }
 
-    private double getQ_t() {
+
+    private double iterateS_gamma2(double t) {
+        return 2 * getSinKsi(t) * Math.sin(2 * Math.PI * t - PHASE) * dt;
+    }
+
+    private double getSinKsi(double t) {
+        double Q_t = getQ_t(t);
+        return 2 * KAPPA * (Q_t-1) / (KAPPA*KAPPA+Math.pow(Q_t - 1, 2));
+    }
+
+
+    private double getQ_t(double t) {
         return Math.sqrt(1-KAPPA*KAPPA)
                 * (Q0 + Math.sqrt(1-KAPPA*KAPPA) * Math.tanh(ALPHA*Math.sqrt(1-KAPPA*KAPPA) * t / 2))
                 / (Q0 * Math.tanh(ALPHA*Math.sqrt(1-KAPPA*KAPPA) * t / 2) + Math.sqrt(1-KAPPA*KAPPA));

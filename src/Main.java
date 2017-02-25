@@ -4,49 +4,38 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Main {
+    static {ZipUtils.saveCodeInHistory();}
+
 
 
 
 
     public static void main(String[] args) {
-        ZipUtils.saveCodeInHistory();
-
-
-        System.out.println(new CalculateSyTheor2(2, 0.1, 0 * Math.PI).getS_gamma());
-
-        countAllSlist();
-
-
-        System.exit(0);
-
-
-
-
-
-        double t_0 = 5;
-        double t_m = Calculator5.dt;
-
-
-
-
-        double alpha = 10;
-        double ksi = 0;
-
-        for (double kappa = 1.1; kappa < 25; kappa+=0.1) {
-//            Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
-//            calc.setKsi_0(ksi * Math.PI);
-//            while (calc.t < t_0)
-//                calc.iteration(false);
-//            while (calc.t < t_0 + t_m)
-//                calc.iteration(true);
-//            System.out.println(calc.ksiList.get(0));
-System.out.println(getKsiStationar(alpha, kappa));
+        ExcelWriter ew = new ExcelWriter();
+        for (double phase = 0; phase < 2; phase = round(phase + 0.1, 1)) {
+            System.out.println(phase);
+            for (double kappa = 0.1; kappa <= 1.0; kappa = round(kappa + 0.1, 1)) {
+                ArrayList<Double> arrayList = new ArrayList<>(100);
+                for (double alpha0 = 1; alpha0 <= 100; alpha0++)
+                    arrayList.add(new CalculateSyTheor2(alpha0, kappa, phase * Math.PI).getS_gamma());
+                ew.addColumn(phase + " PI", arrayList);
+            }
         }
+        ew.write("S_y");
 
 
     }
 
-
+    private static double countAllSlist(double alpha, double kappa, double phase) {
+        double t_0 = 10;
+        double t_m = 0.5;
+        Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phase /*phase*/);
+        while (calc.t < t_0)
+            calc.iteration(false);
+        while (calc.t < t_0 + t_m)
+            calc.iteration(true);
+        return calc.sGamma;
+    }
 
 
     private static void countAll() {
@@ -71,34 +60,6 @@ System.out.println(getKsiStationar(alpha, kappa));
         }
         ew.write("ksi_dzeta");
     }
-
-
-
-    private static void countAllSlist() {
-        double t_0 = 100;
-        double t_m = 0.5;
-
-
-        double[] kappaList = {0.5};
-        double[] alphaList = {2};
-
-        ExcelWriter ew = new ExcelWriter();
-        for (double alpha : alphaList) {
-            for (double kappa : kappaList) {
-                System.out.println("alpha = " + alpha + "; kappa = " + kappa);
-                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, 0 /*phase*/);
-                while (calc.t < t_0)
-                    calc.iteration(false);
-                while (calc.t < t_0 + t_m) {
-                    calc.iteration(true);
-                }
-                System.out.println(calc.sGamma);
-            }
-        }
-        ew.write("ksi_dzeta");
-    }
-
-
 
     private static void ksi_0_alpha() {
         double t_0 = 100;

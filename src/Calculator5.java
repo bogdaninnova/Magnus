@@ -31,9 +31,6 @@ public class Calculator5 {
 
     public ArrayList<Double> ksiList = new ArrayList<>();
 
-    int init_counter = 10;
-    int counter = init_counter-1;
-
 
     private Vector L = new Vector();
     public ArrayList<Vector> track = new ArrayList<>();
@@ -49,19 +46,13 @@ public class Calculator5 {
         L = L.plus(U.multiply(dt));
 
         if (isWrite) {
-            counter++;
-
-            if (counter == init_counter) {
-                double currentTime = t - ((int) t);
-                track.add(L);
-                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
-                sList.add(sGamma);
-                ksiList.add(ksi);
-                counter = 0;
-            }
+            double currentTime = t - ((int) t);
+            track.add(L);
+            sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
+            sList.add(sGamma);
+            ksiList.add(ksi);
         }
     }
-
 
     private double getdKsi() {
         double d1, d2, d3, d4;
