@@ -52,7 +52,7 @@ public class Calculator4 {
         if (isWrite) {
             counter++;
 
-            if (counter == init_counter) {
+//            if (counter == init_counter) {
                 double currentTime = t - ((int) t);
 
                 track.add(L);
@@ -78,7 +78,7 @@ public class Calculator4 {
                     ksiListTheor.add(-getKsiTheor(currentTime - 0.5));
                 }
                 counter = 0;
-            }
+ //           }
         }
     }
 
@@ -104,7 +104,7 @@ public class Calculator4 {
 
 
     private double function(double ksi, double t) {
-        return getdPsi(t) - ALPHA * Math.sin(ksi);
+        return getdPsi3(t) - ALPHA * Math.sin(ksi);
     }
 
     private double getdPsi(double t) {
@@ -118,6 +118,13 @@ public class Calculator4 {
 
     private double getdPsi2(double t) {
         return 2 * Math.PI * PSI_MAX * Math.cos(2 * Math.PI * t + PHASE);
+    }
+
+    private double getdPsi3(double t) {
+        if (t-(int)t < 0.5)
+            return -4*PSI_MAX;
+        else
+            return 4*PSI_MAX;
     }
 
 }

@@ -8,6 +8,7 @@ public class Calculator5 {
     public double PHASE;
     public double PSI_MAX;
     public double ALPHA;//5772.8204089548935 * h 10-6 -- 1
+    private static final double GAMMA = 0.1;
 
 
     public Calculator5(double alpha, double psi, double phase) {
@@ -35,7 +36,7 @@ public class Calculator5 {
     private Vector L = new Vector();
     public ArrayList<Vector> track = new ArrayList<>();
     private Vector getU(double ksi, double t) {
-        return new Vector(1, Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
+        return new Vector(1, GAMMA * Math.sin(ksi), 0).multiply(Math.sin(2 * Math.PI * t));
     }
 
 
@@ -48,7 +49,10 @@ public class Calculator5 {
         if (isWrite) {
             double currentTime = t - ((int) t);
             track.add(L);
-            sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
+            //if (currentTime < 0.5)
+                sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * currentTime - PHASE) * dt;
+            //else
+            //    sGamma += 2 * Math.sin(ksi) * Math.sin(2 * Math.PI * (currentTime-0.5) - PHASE) * dt;
             sList.add(sGamma);
             ksiList.add(ksi);
         }

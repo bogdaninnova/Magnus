@@ -12,6 +12,120 @@ public class Main {
 
     public static void main(String[] args) {
         ExcelWriter ew = new ExcelWriter();
+
+
+        CalculateSyTheor3 c3 = new CalculateSyTheor3(15, 1.25, 0);
+        ArrayList<Double> arrayList = new ArrayList<>();
+
+        for (double time = 0; time < 1.0001; time += 0.001) {
+            arrayList.add(c3.getKsi(time));
+        }
+
+        ew.addColumn("theor", arrayList);
+        ew.write("cst3");
+
+        System.exit(0);
+
+
+
+        double t_0 = 1000;
+        double t_m = 0.5;
+
+
+        //double[] alphas = {25};
+        double[] alphas = {5,10,50};
+
+
+
+
+        double phi = 0;
+
+
+//
+//        for (double t = 10; t <= 500; t += 10) {
+//            Calculator5 calc = new Calculator5(5, 5.1 * 5 / 4 /*psi_m*/, phi * Math.PI /*phase*/);
+//            while (calc.t < t)
+//                calc.iteration(false);
+//            while (calc.t < t + t_m)
+//                calc.iteration(true);
+//            System.out.println(calc.sGamma);
+//        }
+
+
+
+//
+//        for (double alpha = 5; alpha <= 30; alpha = round(alpha + 5, 0)) {
+//            for (double kappa = 1; kappa <= 5; kappa = round(kappa + 0.25, 2)) {
+//                System.out.println("alpha="+alpha + ";kappa="+kappa);
+//                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phi * Math.PI /*phase*/);
+//                while (calc.t < t_0)
+//                    calc.iteration(false);
+//                while (calc.t < t_0 + t_m)
+//                    calc.iteration(true);
+//                ew.addColumn("alpha="+alpha, trim(calc.ksiList, 100));
+//                //ew.addVectorList("kappa="+kappa,trim(calc.track, 50));
+//                //System.out.println(calc.sGamma);
+//            }
+//        }
+//
+//        ew.write("kappa_more_then_one1");
+
+
+
+        for (double alpha : alphas) {
+            ArrayList<Double> list = new ArrayList<>();
+            for (double kappa = 0.01; kappa <= 5; kappa = round(kappa + 0.01, 2)) {
+                System.out.println(alpha + " \\ " + kappa);
+                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phi * Math.PI /*phase*/);
+                while (calc.t < t_0)
+                    calc.iteration(false);
+                while (calc.t < t_0 + t_m)
+                    calc.iteration(true);
+                list.add(calc.sGamma);
+                System.out.println(calc.sGamma);
+            }
+            ew.addColumn("sGamma", list);
+        }
+        ew.write("alpha=51050");
+
+System.exit(0);
+
+//
+//        ExcelWriter excelWriter = new ExcelWriter();
+//
+//        for (double alpha : alphas) {
+//            ArrayList<Double> list = new ArrayList<>();
+//            for (double phi = 0; phi <= 2; phi = round(phi + 0.01, 2)) {
+//                System.out.println(alpha+" \\ "+phi);
+//                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phi * Math.PI /*phase*/);
+//                while (calc.t < t_0)
+//                    calc.iteration(false);
+//                while (calc.t < t_0 + t_m)
+//                    calc.iteration(true);
+//                list.add(calc.sGamma);
+//            }
+//            excelWriter.addColumn("sGamma", list);
+//
+//        }
+//        excelWriter.write("Alpha=5-10-20-30");
+
+
+//        for (double alpha : alphas) {
+//            Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phase /*phase*/);
+//            while (calc.t < t_0)
+//                calc.iteration(false);
+//            while (calc.t < t_0 + t_m)
+//                calc.iteration(true);
+//            excelWriter.addColumn("ksi", trim(calc.ksiList, 10));
+//            excelWriter.addVectorList("track", trim(calc.track, 10));
+//        }
+//        excelWriter.write("Ksi2");
+    }
+
+
+
+    private static void bla() {
+        ExcelWriter ew = new ExcelWriter();
         for (double phase = 0; phase < 2; phase = round(phase + 0.1, 1)) {
             System.out.println(phase);
             for (double kappa = 0.1; kappa <= 1.0; kappa = round(kappa + 0.1, 1)) {
@@ -22,8 +136,6 @@ public class Main {
             }
         }
         ew.write("S_y");
-
-
     }
 
     private static double countAllSlist(double alpha, double kappa, double phase) {
@@ -180,6 +292,19 @@ public class Main {
             list.add(list2.get(i) - list1.get(i));
         return list;
     }
+
+    private static ArrayList trim(ArrayList list, int trim) {
+        ArrayList newList = new ArrayList();
+        int counter = trim;
+
+        for (int i = 0; i < list.size(); i++)
+            if (counter++ >= trim) {
+                newList.add(list.get(i));
+                counter = 0;
+            }
+        return newList;
+    }
+
 
     public static double round(double value, int places) {
         if (places < 0)
