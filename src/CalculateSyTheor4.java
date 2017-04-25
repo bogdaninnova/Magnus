@@ -7,6 +7,7 @@ public class CalculateSyTheor4 {
     private double KAPPA;
     private double NU;
     private double R0;
+    private double P;
 
     public CalculateSyTheor4(double alpha, double kappa, double phase) {
         this.ALPHA = alpha;
@@ -15,6 +16,7 @@ public class CalculateSyTheor4 {
 
         this.NU = getNu();
         this.R0 = getR0();
+        this.P = getP();
 
 
         System.out.println("ALPHA = "+ALPHA);
@@ -22,6 +24,7 @@ public class CalculateSyTheor4 {
         System.out.println("PHASE = "+PHASE);
         System.out.println("NU = "+NU);
         System.out.println("R0 = "+R0);
+        System.out.println("P = "+P);
     }
 
 
@@ -52,6 +55,18 @@ public class CalculateSyTheor4 {
         return (k * Math.PI - Math.atan(Math.sqrt(KAPPA*KAPPA-1)/R0)) / 2 / NU;
     }
 
+    public double getP() {
+        double nuAll = NU;
+        int counter = 0;
+        while (nuAll > Math.PI) {
+            nuAll -= Math.PI;
+            counter++;
+        }
+        return counter;
+    }
+
+
+
     public double getP_k(double t) {
         double k = 0;
         while (true) {
@@ -68,7 +83,7 @@ public class CalculateSyTheor4 {
         if (time < 0.5)
             return -2 * Math.PI * getP_k(time) + 2 * Math.atan((getR(time)-1) / KAPPA);
         else
-            return -(-2 * Math.PI * getP_k(time-0.5) + 2 * Math.atan((getR(time-0.5)-1) / KAPPA));
+            return -2*Math.PI * P -(-2 * Math.PI * getP_k(time-0.5) + 2 * Math.atan((getR(time-0.5)-1) / KAPPA));
 
 
     }

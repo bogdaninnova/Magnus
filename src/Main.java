@@ -20,7 +20,7 @@ public class Main {
 
 
         double kappa = 15;
-        double alpha = 25;
+        double alpha = 15;
         double phase = 0;
 
 
