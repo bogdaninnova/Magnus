@@ -14,44 +14,38 @@ public class Main {
         ExcelWriter ew = new ExcelWriter();
 
 
-        CalculateSyTheor3 c3 = new CalculateSyTheor3(15, 1.25, 0);
+
+
+
+
+
+        double kappa = 15;
+        double alpha = 25;
+        double phase = 0;
+
+
+
+
+
+
+        double t_0 = 100;
+        double t_m = 1;
+
+        Calculator5 calc = new Calculator5(alpha, alpha * kappa / 4 /*psi_m*/, phase);
+        CalculateSyTheor4 c3 = new CalculateSyTheor4(alpha, kappa, phase);
         ArrayList<Double> arrayList = new ArrayList<>();
 
-        for (double time = 0; time < 1.0001; time += 0.001) {
-            arrayList.add(c3.getKsi(time));
+
+        while (calc.t < t_0)
+            calc.iteration(false);
+        while (calc.t < t_0 + t_m) {
+            calc.iteration(true);
+            arrayList.add(c3.getKsi(calc.t));
         }
 
-        ew.addColumn("theor", arrayList);
-        ew.write("cst3");
-
-        System.exit(0);
-
-
-
-        double t_0 = 1000;
-        double t_m = 0.5;
-
-
-        //double[] alphas = {25};
-        double[] alphas = {5,10,50};
-
-
-
-
-        double phi = 0;
-
-
-//
-//        for (double t = 10; t <= 500; t += 10) {
-//            Calculator5 calc = new Calculator5(5, 5.1 * 5 / 4 /*psi_m*/, phi * Math.PI /*phase*/);
-//            while (calc.t < t)
-//                calc.iteration(false);
-//            while (calc.t < t + t_m)
-//                calc.iteration(true);
-//            System.out.println(calc.sGamma);
-//        }
-
-
+        ew.addColumn("theor", trim(arrayList, 200));
+        ew.addColumn("theor", trim(calc.ksiList, 200));
+        ew.write("cst4");
 
 //
 //        for (double alpha = 5; alpha <= 30; alpha = round(alpha + 5, 0)) {
@@ -72,21 +66,21 @@ public class Main {
 
 
 
-        for (double alpha : alphas) {
-            ArrayList<Double> list = new ArrayList<>();
-            for (double kappa = 0.01; kappa <= 5; kappa = round(kappa + 0.01, 2)) {
-                System.out.println(alpha + " \\ " + kappa);
-                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phi * Math.PI /*phase*/);
-                while (calc.t < t_0)
-                    calc.iteration(false);
-                while (calc.t < t_0 + t_m)
-                    calc.iteration(true);
-                list.add(calc.sGamma);
-                System.out.println(calc.sGamma);
-            }
-            ew.addColumn("sGamma", list);
-        }
-        ew.write("alpha=51050");
+//        for (double alpha : alphas) {
+//            ArrayList<Double> list = new ArrayList<>();
+//            for (double kappa = 2.0; kappa <= 3.5; kappa = round(kappa + 0.01, 2)) {
+//                System.out.println(alpha + " \\ " + kappa);
+//                Calculator5 calc = new Calculator5(alpha, kappa * alpha / 4 /*psi_m*/, phi * Math.PI /*phase*/);
+//                while (calc.t < t_0)
+//                    calc.iteration(false);
+//                while (calc.t < t_0 + t_m)
+//                    calc.iteration(true);
+//                list.add(calc.sGamma);
+//                System.out.println(calc.sGamma);
+//            }
+//            ew.addColumn("sGamma", list);
+//        }
+//        ew.write("alpha=50t=5000");
 
 System.exit(0);
 
