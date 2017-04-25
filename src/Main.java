@@ -29,7 +29,7 @@ public class Main {
 
 
         double t_0 = 100;
-        double t_m = 1;
+        double t_m = 0.5;
 
         Calculator5 calc = new Calculator5(alpha, alpha * kappa / 4 /*psi_m*/, phase);
         CalculateSyTheor4 c3 = new CalculateSyTheor4(alpha, kappa, phase);
@@ -42,6 +42,10 @@ public class Main {
             calc.iteration(true);
             arrayList.add(c3.getKsi(calc.t));
         }
+
+
+        System.out.println(calc.sGamma);
+        System.out.println(c3.getS());
 
         ew.addColumn("theor", trim(arrayList, 200));
         ew.addColumn("theor", trim(calc.ksiList, 200));

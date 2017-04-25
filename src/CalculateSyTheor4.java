@@ -90,6 +90,19 @@ public class CalculateSyTheor4 {
 
 
 
+    public double getdS(double t) {
+        return 4 * KAPPA * (getR(t)-1)/ (KAPPA*KAPPA + Math.pow(getR(t)-1, 2)) * Math.sin(2*Math.PI*t-PHASE);
+    }
+
+
+
+    public double getS() {
+        double s = 0;
+        double dt = 0.000001;
+        for (double t = 0; t <= 0.5; t += dt)
+            s += getdS(t);
+        return s*dt;
+    }
 
 
 }
